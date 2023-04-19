@@ -15,7 +15,7 @@ public class Report {
         websites = new ArrayList<>();
     }
 
-    public void createReport() throws IOException {
+    public void createReport() {
         Website startingSite = new Website(this.startingSite.getHref(), this.crawlingDepth);
         startingSite.crawlWebsite();
         websites.add(startingSite);

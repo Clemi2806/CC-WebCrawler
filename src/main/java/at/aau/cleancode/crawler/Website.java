@@ -11,26 +11,20 @@ import java.util.List;
 public class Website {
     private final Link url;
     private String title;
-    private final int crawlingDepth;
     private List<Heading> siteHeadings;
     private List<Link> siteLinks;
 
     public Website(String siteLink, int crawlingDepth) {
         this.url = new Link(siteLink);
-        this.crawlingDepth = crawlingDepth;
         this.siteHeadings = new ArrayList<>();
         this.siteLinks = new ArrayList<>();
-    }
-
-    public int getCrawlingDepth(){
-        return this.crawlingDepth;
     }
 
     public String getTitle(){
         return this.title;
     }
 
-    public void crawlWebsite() throws IOException {
+    public void crawlWebsite() {
         try{
             if(this.url.isBroken()){
                 throw new IOException();

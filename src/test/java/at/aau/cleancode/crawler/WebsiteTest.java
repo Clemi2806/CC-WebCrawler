@@ -11,11 +11,9 @@ class WebsiteTest {
     @Test
     void createWebsite() {
         Website site = new Website("http://wikipedia.org",1);
-        try {
-            site.crawlWebsite();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        site.crawlWebsite();
+
         assertEquals("Wikipedia", site.getTitle());
     }
 
