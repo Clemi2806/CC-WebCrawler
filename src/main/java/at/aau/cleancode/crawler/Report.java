@@ -7,7 +7,7 @@ import java.util.List;
 public class Report {
     private final String startingSite;
     private final int crawlingDepth;
-    ArrayList<Website> websites;
+    List<Website> websites;
 
     public Report(String startingSite, int crawlingDepth) {
         this.startingSite = startingSite;

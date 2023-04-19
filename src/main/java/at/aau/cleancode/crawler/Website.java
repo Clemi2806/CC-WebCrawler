@@ -9,16 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Website {
-    private final String siteLink;
+    private final String url;
     private String title;
     private final int crawlingDepth;
-    private ArrayList<Heading> headings;
-    private Elements links;
+    private List<Heading> siteHeadings;
+    private List<Link> siteLinks;
 
     public Website(String siteLink, int crawlingDepth) {
-        this.siteLink = siteLink;
+        this.url = siteLink;
         this.crawlingDepth = crawlingDepth;
-        this.headings = new ArrayList<>();
+        this.siteHeadings = new ArrayList<>();
+        this.siteLinks = new ArrayList<>();
     }
 
     public int getCrawlingDepth(){
@@ -30,9 +31,9 @@ public class Website {
     }
 
     public void crawlWebsite() throws IOException {
-        Document document = Crawler.getDocument(this.siteLink);
+        Document document = Crawler.getDocument(this.url);
         this.title = document.title();
-        this.links = document.select("a[href]");
+        fetchLinks(document);
         fetchHeadings(document);
     }
 
@@ -40,14 +41,21 @@ public class Website {
         for(int i = 1; i <= 6; i++){
             Elements heading = document.select("h"+i);
             for(Element head : heading){
-                this.headings.add(new Heading(head.ownText(), i));
+                this.siteHeadings.add(new Heading(head.ownText(), i));
             }
+        }
+    }
+
+    private void fetchLinks(Document document){
+        Elements links = document.select("a[href]");
+        for(Element link : links){
+            this.siteLinks.add(new Link(link.attr("href")));
         }
     }
 
     public List<String> getHeadings(){
         List<String> heads = new ArrayList<>();
-        for(Heading head : this.headings){
+        for(Heading head : this.siteHeadings){
             heads.add(head.getHeading());
         }
         return heads;
@@ -55,8 +63,8 @@ public class Website {
 
     public List<String> getLinks(){
         List<String> links = new ArrayList<>();
-        for(Element link : this.links){
-            links.add(link.attr("href"));
+        for(Link link : this.siteLinks){
+            links.add(link.getHref());
         }
         return links;
     }
