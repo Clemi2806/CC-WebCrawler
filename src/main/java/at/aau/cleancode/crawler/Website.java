@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Website {
-    private final String url;
+    private final Link url;
     private String title;
     private final int crawlingDepth;
     private List<Heading> siteHeadings;
     private List<Link> siteLinks;
 
     public Website(String siteLink, int crawlingDepth) {
-        this.url = siteLink;
+        this.url = new Link(siteLink);
         this.crawlingDepth = crawlingDepth;
         this.siteHeadings = new ArrayList<>();
         this.siteLinks = new ArrayList<>();
@@ -31,10 +31,17 @@ public class Website {
     }
 
     public void crawlWebsite() throws IOException {
-        Document document = Crawler.getDocument(this.url);
-        this.title = document.title();
-        fetchLinks(document);
-        fetchHeadings(document);
+        try{
+            if(this.url.isBroken()){
+                throw new IOException();
+            }
+            Document document = Crawler.getDocument(this.url.getHref());
+            this.title = document.title();
+            fetchLinks(document);
+            fetchHeadings(document);
+        }catch (IOException e){
+            System.out.println("Error while accessing website " + this.url.getHref());
+        }
     }
 
     private void fetchHeadings(Document document){

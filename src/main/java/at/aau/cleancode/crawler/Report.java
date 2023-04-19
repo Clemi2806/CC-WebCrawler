@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Report {
-    private final String startingSite;
+    private final Link startingSite;
     private final int crawlingDepth;
     List<Website> websites;
 
     public Report(String startingSite, int crawlingDepth) {
-        this.startingSite = startingSite;
+        this.startingSite = new Link(startingSite);
         this.crawlingDepth = crawlingDepth;
         websites = new ArrayList<>();
     }
 
     public void createReport() throws IOException {
-        Website startingSite = new Website(this.startingSite, this.crawlingDepth);
+        Website startingSite = new Website(this.startingSite.getHref(), this.crawlingDepth);
         startingSite.crawlWebsite();
         websites.add(startingSite);
         if(this.crawlingDepth <= 1){
