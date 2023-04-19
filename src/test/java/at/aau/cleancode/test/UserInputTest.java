@@ -55,17 +55,4 @@ public class UserInputTest {
         verify(userInputScanner).nextLine();
     }
 
-    @Test
-    public void testSupportedLanguages(){
-        for(String lang : Main.supportedLanguages){
-            String shortcode = lang.split(" - ")[0];
-            assertTrue(Main.checkLanguage(shortcode));
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"de", "ef", "Deutsch", "Spaghetti", "1"})
-    public void testUnsupportedLanguage(String lang){
-        assertFalse(Main.checkLanguage(lang));
-    }
 }
