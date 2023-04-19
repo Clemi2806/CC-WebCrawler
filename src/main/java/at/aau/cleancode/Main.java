@@ -56,9 +56,14 @@ public class Main {
         String enteredDepth = userInputScanner.nextLine();
         try{
             crawlDepth = Integer.parseInt(enteredDepth);
-        } catch (NumberFormatException nfe){
+            if(crawlDepth < 1){
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException nfe){
             System.out.println("Invalid depth continuing with default (2)");
+            crawlDepth = 2;
         }
+
         return crawlDepth;
     }
 
