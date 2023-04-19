@@ -13,6 +13,10 @@ public class ReportWriter {
     private Report report;
     private DeeplTranslator translator;
 
+    private static final String NEWLINE = "\n";
+    private static final String RULE = "___\n";
+    private static final String BREAK = "<br>";
+
     public ReportWriter(Report report, DeeplTranslator translator) throws IOException {
         this.report = report;
         this.translator = translator;
@@ -30,20 +34,22 @@ public class ReportWriter {
         for(String websiteString : parsedWebsites){
             writer.append(websiteString);
         }
+        writer.flush();
+        writer.close();
     }
 
     private String getMainInformation() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
-                .append("input: ").append(wrapLink(report.getStartingSite()))
-                .append(breakChars()).append("depth: ").append(report.getCrawlingDepth())
-                .append(breakChars()).append("target language: ").append(report.getTargetLanguage());
+                .append("input: ").append(wrapLink(report.getStartingSite())).append(NEWLINE)
+                .append(BREAK).append("depth: ").append(report.getCrawlingDepth()).append(NEWLINE)
+                .append(BREAK).append("target language: ").append(report.getTargetLanguage()).append(NEWLINE);
         return stringBuilder.toString();
     }
 
     private String getSourceLanguages(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(breakChars()).append("source languages: ");
+        stringBuilder.append(BREAK).append("source languages: ");
         for(String lang : translator.getTranslatedLanguages()){
             stringBuilder.append(lang).append(" ");
         }
@@ -54,10 +60,10 @@ public class ReportWriter {
     private String getWebsiteInformation(Website website) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
-                .append("\n")
-                .append(horizontalRule())
-                .append(breakChars()).append("link: ").append(wrapLink(website.getUrl()))
-                .append(breakChars()).append("title: ").append(website.getTitle());
+                .append(NEWLINE)
+                .append(RULE)
+                .append(BREAK).append("link: ").append(wrapLink(website.getUrl()))
+                .append(BREAK).append("title: ").append(website.getTitle());
 
         String headings = getHeadings(website);
         String links = getLinks(website);
@@ -68,20 +74,18 @@ public class ReportWriter {
     private String getHeadings(Website website){
         StringBuilder stringBuilder = new StringBuilder();
         for(Heading heading :website.getHeadings()){
-            for (int i = 0; i < heading.getDepth(); i++) {
-                stringBuilder.append("#");
-            }
+            stringBuilder.append("#".repeat(Math.max(0, heading.getDepth())));
             String headingText = heading.getHeading();
-            boolean isTranslated = true;
-            try {
-                headingText = translator.translate(headingText);
-            } catch (Exception e) {
-                isTranslated = false;
-            }
+            boolean isTranslated = false;
+//            try {
+//                headingText = translator.translate(headingText);
+//            } catch (Exception e) {
+//                isTranslated = false;
+//            }
             if (isTranslated) {
-                stringBuilder.append(" ").append(headingText).append("\n");
+                stringBuilder.append(" ").append(headingText).append(NEWLINE);
             } else {
-                stringBuilder.append(" ").append(headingText).append(" (not translated)").append("\n");
+                stringBuilder.append(" ").append(headingText).append(" (not translated)").append(NEWLINE);
             }
 
         }
@@ -92,10 +96,10 @@ public class ReportWriter {
 
     private String getLinks(Website website){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n").append("---").append("\n");
+        stringBuilder.append(NEWLINE).append("---").append(NEWLINE);
 
         for(Link link : website.getLinks()){
-            stringBuilder.append(breakChars()).append(wrapLink(link.getHref()));
+            stringBuilder.append(BREAK).append(wrapLink(link.getHref()));
             if(link.isBroken()){
                 stringBuilder.append(" broken link");
             }
@@ -103,15 +107,6 @@ public class ReportWriter {
 
         return stringBuilder.toString();
     }
-
-    private String horizontalRule(){
-        return "___\n";
-    }
-
-    private String breakChars(){
-        return "<br>";
-    }
-
     private String wrapLink(String link){
         return "<a>" + link + "</a>";
     }
