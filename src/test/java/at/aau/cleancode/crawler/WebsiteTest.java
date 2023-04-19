@@ -16,7 +16,7 @@ class WebsiteTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals("Wikipedia", site.toString());
+        assertEquals("Wikipedia", site.getTitle());
     }
 
     @Test
