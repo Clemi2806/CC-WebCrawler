@@ -6,6 +6,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Website {
     private final String siteLink;
@@ -44,20 +45,20 @@ public class Website {
         }
     }
 
-    public ArrayList<String> getHeadings(){
-        ArrayList<String> heads = new ArrayList<>();
+    public List<String> getHeadings(){
+        List<String> heads = new ArrayList<>();
         for(Heading head : this.headings){
             heads.add(head.getHeading());
         }
         return heads;
     }
 
-    @Override
-    public String toString() {
-        String website = "";
-
-
-        return headings.toString();
+    public List<String> getLinks(){
+        List<String> links = new ArrayList<>();
+        for(Element link : this.links){
+            links.add(link.attr("href"));
+        }
+        return links;
     }
 }
 
