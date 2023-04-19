@@ -54,4 +54,5 @@ public class UserInputTest {
         assertEquals(2, crawlDepth);
         verify(userInputScanner).nextLine();
     }
+
 }

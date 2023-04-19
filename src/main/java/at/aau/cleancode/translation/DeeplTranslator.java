@@ -3,6 +3,7 @@ package at.aau.cleancode.translation;
 import com.deepl.api.TextResult;
 import com.deepl.api.Translator;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class DeeplTranslator {
@@ -40,23 +41,21 @@ public class DeeplTranslator {
             "ZH - Chinese (simplified)"
     };
 
-    private String API_KEY;
     private String targetLanguage;
     private Translator translator;
     private Set<String> translatedLanguages;
 
-    public DeeplTranslator(String targetLanguage) throws ApiKeyNotFoundException {
+    public DeeplTranslator(String targetLanguage, String apikey) throws DeeplTranslatorException {
+        if(apikey == null) throw new DeeplTranslatorException("API Key was null");
+        if(!isSupportedLanguage(targetLanguage)) throw new DeeplTranslatorException("Invalid target language!");
         this.targetLanguage = targetLanguage;
-        loadApiKey();
-        translator = new Translator(API_KEY);
+        translator = new Translator(apikey);
+        translatedLanguages = new HashSet<>();
     }
 
-    private void loadApiKey() throws ApiKeyNotFoundException{
-        String key = System.getenv("CCWEBCRAWLERAPIKEY");
-        if(key == null){
-            throw new ApiKeyNotFoundException();
-        }
-        this.API_KEY = key;
+    public DeeplTranslator(Translator translator) {
+        this.translator = translator;
+        translatedLanguages = new HashSet<>();
     }
 
     public String translate(String text) throws Exception {
@@ -66,7 +65,18 @@ public class DeeplTranslator {
     }
 
     public Set<String> getTranslatedLanguages() {
-        return translatedLanguages;
+        Set<String> languages = new HashSet<>();
+        for(String language : translatedLanguages){
+            for(String supportedLanguage : supportedLanguages){
+                String shortcode = supportedLanguage.split(" - ")[0];
+                String languageName = supportedLanguage.split(" - ")[1];
+                if(shortcode.equals(language)){
+                    languages.add(languageName);
+                }
+            }
+
+        }
+        return languages;
     }
 
     public static void printTargetLanguages() {
@@ -75,9 +85,9 @@ public class DeeplTranslator {
         }
     }
 
-    public static boolean checkLanguage(String selectedLanguage){
+    public static boolean isSupportedLanguage(String selectedLanguage){
         for(String lang : supportedLanguages){
-            if(selectedLanguage.equals(lang.substring(0, selectedLanguage.length()))){
+            if(selectedLanguage.equals(lang.split(" - ")[0])){
                 return true;
             }
         }

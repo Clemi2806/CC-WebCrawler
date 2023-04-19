@@ -1,6 +1,8 @@
 package at.aau.cleancode;
 
+import at.aau.cleancode.translation.DeeplAPIUtils;
 import at.aau.cleancode.translation.DeeplTranslator;
+import at.aau.cleancode.translation.DeeplTranslatorException;
 
 import java.util.Scanner;
 
@@ -13,6 +15,13 @@ public class Main {
         String targetUrl = readTargetUrl();
         int crawlDepth = readCrawlDepth();
         String targetLanguage = readTargetLanguage();
+
+        String translationApiKey = DeeplAPIUtils.loadApiKey();
+        try {
+            DeeplTranslator translator = new DeeplTranslator(targetLanguage, translationApiKey);
+        } catch (DeeplTranslatorException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String readTargetUrl(){
@@ -45,7 +54,7 @@ public class Main {
         do{
             System.out.print("Enter your preferred language, ex. DE: ");
             targetLanguage = userInputScanner.nextLine();
-            isSupportedLanguage = DeeplTranslator.checkLanguage(targetLanguage);
+            isSupportedLanguage = DeeplTranslator.isSupportedLanguage(targetLanguage);
             if(!isSupportedLanguage){
                 System.out.println("Unsupported language. Please select one from the list and enter the shortcode.");
             }

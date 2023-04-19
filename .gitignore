@@ -16,3 +16,5 @@ buildNumber.properties
 *.ipr
 
 .DS_Store
+
+crawler.properties
