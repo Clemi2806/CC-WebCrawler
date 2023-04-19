@@ -53,20 +53,16 @@ public class Website {
         }
     }
 
-    public List<String> getHeadings(){
-        List<String> heads = new ArrayList<>();
-        for(Heading head : this.siteHeadings){
-            heads.add(head.getHeading());
-        }
-        return heads;
+    public List<Heading> getHeadings(){
+        return this.siteHeadings;
     }
 
-    public List<String> getLinks(){
-        List<String> links = new ArrayList<>();
-        for(Link link : this.siteLinks){
-            links.add(link.getHref());
-        }
-        return links;
+    public List<Link> getLinks(){
+        return this.siteLinks;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }
 
