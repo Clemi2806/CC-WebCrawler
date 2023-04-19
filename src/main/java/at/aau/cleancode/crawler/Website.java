@@ -61,12 +61,8 @@ public class Website {
         return heads;
     }
 
-    public List<String> getLinks(){
-        List<String> links = new ArrayList<>();
-        for(Link link : this.siteLinks){
-            links.add(link.getHref());
-        }
-        return links;
+    public List<Link> getLinks(){
+        return siteLinks;
     }
 }
 

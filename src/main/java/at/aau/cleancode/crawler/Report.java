@@ -22,8 +22,11 @@ public class Report {
         if(this.crawlingDepth <= 1){
             return;
         }
-        for(String link : startingSite.getLinks()){
-            Report report = new Report(link, this.crawlingDepth-1);
+        for(Link link : startingSite.getLinks()){
+            if(link.isBroken()){
+                continue;
+            }
+            Report report = new Report(link.getHref(), this.crawlingDepth-1);
             report.createReport();
             websites.addAll(report.getAllWebsites());
         }
