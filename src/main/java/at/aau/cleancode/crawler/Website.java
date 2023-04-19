@@ -14,7 +14,7 @@ public class Website {
     private List<Heading> siteHeadings;
     private List<Link> siteLinks;
 
-    public Website(String siteLink, int crawlingDepth) {
+    public Website(String siteLink) {
         this.url = new Link(siteLink);
         this.siteHeadings = new ArrayList<>();
         this.siteLinks = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Website {
         for(int i = 1; i <= 6; i++){
             Elements heading = document.select("h"+i);
             for(Element head : heading){
-                this.siteHeadings.add(new Heading(head.ownText(), i));
+                this.siteHeadings.add(new Heading(head.text(), i));
             }
         }
     }
