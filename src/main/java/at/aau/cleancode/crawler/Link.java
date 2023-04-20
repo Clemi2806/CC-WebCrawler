@@ -9,7 +9,7 @@ public class Link {
 
     public Link(String href) {
         this.href = href;
-        this.isBroken = !checkUrl(href);
+        this.isBroken = checkUrl(href);
     }
 
     public boolean isBroken() {
@@ -28,7 +28,7 @@ public class Link {
             conn.connect();
 
             int responseCode = conn.getResponseCode();
-            return responseCode == 200;
+            return responseCode != 200;
         } catch (Exception e) {
             return false;
         }
