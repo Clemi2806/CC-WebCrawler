@@ -34,17 +34,17 @@ public class Website {
             Document document = Crawler.getDocument(this.url.getHref());
             this.title = document.title();
             fetchLinks(document);
-            fetchHeadings(document);
+            fetchHeadlines(document);
         }catch (IOException e){
             System.out.println("Error while accessing website " + this.url.getHref());
         }
     }
 
-    private void fetchHeadings(Document document){
+    private void fetchHeadlines(Document document){
         for(int i = 1; i <= 6; i++){
-            Elements heading = document.select("h"+i);
-            for(Element head : heading){
-                this.siteHeadlines.add(new Headline(head.text(), i));
+            Elements headlines = document.select("h"+i);
+            for(Element headline : headlines){
+                this.siteHeadlines.add(new Headline(headline.text(), i));
             }
         }
     }
@@ -56,7 +56,7 @@ public class Website {
         }
     }
 
-    public List<Headline> getHeadings(){
+    public List<Headline> getHeadlines(){
         return this.siteHeadlines;
     }
 

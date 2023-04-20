@@ -78,7 +78,7 @@ public class ReportWriter {
 
     private String getHeadings(Website website, String indentation){
         StringBuilder stringBuilder = new StringBuilder();
-        for(Headline headline :website.getHeadings()){
+        for(Headline headline :website.getHeadlines()){
             stringBuilder.append("#".repeat(Math.max(0, headline.getDepth())));
             String headingText = headline.getHeading();
             boolean isTranslated = true;
