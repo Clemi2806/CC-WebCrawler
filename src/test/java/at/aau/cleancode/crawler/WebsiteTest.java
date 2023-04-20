@@ -97,18 +97,16 @@ class WebsiteTest {
         website = new Website("https://wikipedia.org", 1);
         when(workingLink.getHref()).thenReturn("https://wikipedia.org");
         assertEquals("https://wikipedia.org", workingLink.getHref());
-        verify(workingLink, times(1));
+        verify(workingLink, times(1)).getHref();
     }
 
     @Test
     void getCrawlDepth() throws IOException {
         initWebsite();
-
+        assertEquals(1, website.getCrawlDepth());
     }
 
     void initWebsite() throws IOException {
-
-
         when(headerElement.text()).thenReturn("Header Text");
         when(linkElement.attr("href")).thenReturn("A href");
 

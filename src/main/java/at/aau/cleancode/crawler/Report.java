@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Report {
     private Website startingSite;
+    // wieso targetLanguage da?
     private final String targetLanguage;
     private List<Website> websites;
 
