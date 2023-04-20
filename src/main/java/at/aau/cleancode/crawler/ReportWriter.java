@@ -27,7 +27,7 @@ public class ReportWriter {
     public void writeReport() throws IOException {
         writer.append(getMainInformation());
         List<String> parsedWebsites = new ArrayList<>();
-        for(Website website : report.websites){
+        for(Website website : report.getAllWebsites()){
             parsedWebsites.add(getWebsiteInformation(website));
         }
         writer.append(getSourceLanguages());

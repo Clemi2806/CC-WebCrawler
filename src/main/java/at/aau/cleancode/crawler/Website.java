@@ -14,16 +14,38 @@ public class Website {
     private List<Headline> siteHeadlines;
     private List<Link> siteLinks;
     private int crawlDepth;
+    private Crawler crawler;
+
+    public Website(Link siteLink, int crawlDepth) {
+        this.url = siteLink;
+        this.siteHeadlines = new ArrayList<>();
+        this.siteLinks = new ArrayList<>();
+        this.crawlDepth = crawlDepth;
+        crawler = null;
+    }
 
     public Website(String siteLink, int crawlDepth) {
         this.url = new Link(siteLink);
         this.siteHeadlines = new ArrayList<>();
         this.siteLinks = new ArrayList<>();
         this.crawlDepth = crawlDepth;
+        crawler = null;
+    }
+
+    public String getUrl() {
+        return url.getHref();
+    }
+
+    public int getCrawlDepth() {
+        return crawlDepth;
     }
 
     public String getTitle(){
         return this.title;
+    }
+
+    public void setCrawler(Crawler crawler) {
+        this.crawler = crawler;
     }
 
     public void crawlWebsite() {
@@ -31,7 +53,10 @@ public class Website {
             if(this.url.isBroken()){
                 throw new IOException();
             }
-            Document document = Crawler.getDocument(this.url.getHref());
+            if(crawler == null){
+                crawler = new Crawler();
+            }
+            Document document = crawler.getDocument(this.url.getHref());
             this.title = document.title();
             fetchLinks(document);
             fetchHeadlines(document);
@@ -64,13 +89,7 @@ public class Website {
         return this.siteLinks;
     }
 
-    public String getUrl() {
-        return url.getHref();
-    }
 
-    public int getCrawlDepth() {
-        return crawlDepth;
-    }
 }
 
 

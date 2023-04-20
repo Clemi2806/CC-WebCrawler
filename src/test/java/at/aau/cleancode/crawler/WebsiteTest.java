@@ -1,47 +1,128 @@
 package at.aau.cleancode.crawler;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class WebsiteTest {
 
+    Link mockSiteUrl;
+    Link workingLink;
+    Link brokenLink;
+    Crawler mockCrawler;
+    Document mockDocument;
+
+    Element linkElement;
+    Element headerElement;
+
+    Website website;
+
+    @BeforeEach
+    void setUp(){
+        mockSiteUrl = mock(Link.class);
+        workingLink = mock(Link.class);
+        brokenLink = mock(Link.class);
+        mockCrawler = mock(Crawler.class);
+        mockDocument = mock(Document.class);
+        linkElement = mock(Element.class);
+        headerElement = mock(Element.class);
+
+        website = null;
+    }
+
+
     @Test
     void createWebsite() {
-        Website site = new Website("http://wikipedia.org",1);
-
-        site.crawlWebsite();
-
-        assertEquals("Wikipedia", site.getTitle());
+        assertNotNull(new Website("testurl", 1));
     }
 
     @Test
-    void addHeading() {
+    void getTitle() throws IOException {
+        initWebsite();
+
+        website.crawlWebsite();
+
+        assertEquals(mockDocument.title(), website.getTitle());
     }
 
     @Test
-    void addLink() {
+    void crawlWebsite() throws IOException {
+        //when
+        initWebsite();
+
+        //then
+        website.crawlWebsite();
+
+        //verify
+        verify(linkElement).attr("href");
+        verify(headerElement).text();
+
+        verify(mockDocument).select("h1");
+        verify(mockDocument).select("a[href]");
     }
 
     @Test
-    void getCrawlingDepth() {
+    void getHeadlines() throws IOException {
+        initWebsite();
+
+        website.crawlWebsite();
+
+        assertEquals(1, website.getHeadlines().size());
     }
 
     @Test
-    void getTitle() {
+    void getLinks() throws IOException {
+        initWebsite();
+
+        website.crawlWebsite();
+
+        assertEquals(1, website.getLinks().size());
     }
 
     @Test
-    void crawlWebsite() {
+    void getUrl() {
+        website = new Website("https://wikipedia.org", 1);
+        when(workingLink.getHref()).thenReturn("https://wikipedia.org");
+        assertEquals("https://wikipedia.org", workingLink.getHref());
+        verify(workingLink, times(1));
     }
 
     @Test
-    void getHeadings() {
+    void getCrawlDepth() throws IOException {
+        initWebsite();
+
     }
 
-    @Test
-    void getLinks() {
+    void initWebsite() throws IOException {
+
+
+        when(headerElement.text()).thenReturn("Header Text");
+        when(linkElement.attr("href")).thenReturn("A href");
+
+        Elements linkElements = new Elements(linkElement);
+        Elements headerElements = new Elements(headerElement);
+
+        website = new Website(mockSiteUrl, 1);
+        when(mockSiteUrl.isBroken()).thenReturn(false);
+        website.setCrawler(mockCrawler);
+
+        when(mockCrawler.getDocument(any())).thenReturn(mockDocument);
+        when(mockDocument.title()).thenReturn("Wikipedia");
+        when(mockDocument.select(anyString())).thenReturn(new Elements());
+        when(mockDocument.select("h1")).thenReturn(headerElements);
+        when(mockDocument.select("a[href]")).thenReturn(linkElements);
     }
 }
