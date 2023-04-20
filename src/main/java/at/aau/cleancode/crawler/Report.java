@@ -18,7 +18,7 @@ public class Report {
     }
 
     public void createReport() {
-        Website startingSite = new Website(this.startingSite.getHref());
+        Website startingSite = new Website(this.startingSite.getHref(), crawlingDepth);
         startingSite.crawlWebsite();
         websites.add(startingSite);
         if(this.crawlingDepth <= 1){
@@ -40,7 +40,7 @@ public class Report {
     }
 
     public String getStartingSite() {
-        return startingSite;
+        return startingSite.getHref();
     }
 
     public int getCrawlingDepth() {

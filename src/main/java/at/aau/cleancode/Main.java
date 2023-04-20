@@ -28,11 +28,7 @@ public class Main {
             System.out.println("Unable to create Translation service.");
         }
         Report report = new Report(targetUrl, crawlDepth, targetLanguage);
-        try {
-            report.createReport();
-        } catch (IOException e) {
-            System.out.println("Unable to create report!");
-        }
+        report.createReport();
         ReportWriter reportWriter;
         try {
             reportWriter = new ReportWriter(report, translator);

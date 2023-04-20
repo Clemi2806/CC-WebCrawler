@@ -58,34 +58,40 @@ public class ReportWriter {
     }
 
     private String getWebsiteInformation(Website website) {
+        int currentDepth = report.getCrawlingDepth() - website.getCrawlDepth();
+        String indentation = currentDepth != 0 ? "--".repeat(currentDepth) + "> " : "";
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
                 .append(NEWLINE)
                 .append(RULE)
-                .append(BREAK).append("link: ").append(wrapLink(website.getUrl()))
-                .append(BREAK).append("title: ").append(website.getTitle());
+                .append(BREAK).append(indentation).append("link: ").append(wrapLink(website.getUrl())).append(NEWLINE)
+                .append(BREAK).append(indentation).append("title: ").append(website.getTitle()).append(NEWLINE);
 
-        String headings = getHeadings(website);
-        String links = getLinks(website);
+        String headings = getHeadings(website, indentation);
+        String links = getLinks(website, indentation);
 
+        stringBuilder
+                .append(headings).append(NEWLINE)
+                .append(links).append(NEWLINE);
         return stringBuilder.toString();
     }
 
-    private String getHeadings(Website website){
+    private String getHeadings(Website website, String indentation){
         StringBuilder stringBuilder = new StringBuilder();
         for(Heading heading :website.getHeadings()){
             stringBuilder.append("#".repeat(Math.max(0, heading.getDepth())));
             String headingText = heading.getHeading();
-            boolean isTranslated = false;
-//            try {
-//                headingText = translator.translate(headingText);
-//            } catch (Exception e) {
-//                isTranslated = false;
-//            }
+            boolean isTranslated = true;
+            try {
+                headingText = translator.translate(headingText);
+            } catch (Exception e) {
+                isTranslated = false;
+            }
+            stringBuilder.append(" ").append(indentation);
             if (isTranslated) {
-                stringBuilder.append(" ").append(headingText).append(NEWLINE);
+                stringBuilder.append(headingText).append(NEWLINE);
             } else {
-                stringBuilder.append(" ").append(headingText).append(" (not translated)").append(NEWLINE);
+                stringBuilder.append(headingText).append(" (not translated)").append(NEWLINE);
             }
 
         }
@@ -94,21 +100,22 @@ public class ReportWriter {
     }
 
 
-    private String getLinks(Website website){
+    private String getLinks(Website website, String indentation){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(NEWLINE).append("---").append(NEWLINE);
 
         for(Link link : website.getLinks()){
-            stringBuilder.append(BREAK).append(wrapLink(link.getHref()));
+            stringBuilder.append(BREAK).append(indentation).append(wrapLink(link.getHref()));
             if(link.isBroken()){
                 stringBuilder.append(" broken link");
             }
+            stringBuilder.append(NEWLINE);
         }
 
         return stringBuilder.toString();
     }
     private String wrapLink(String link){
-        return "<a>" + link + "</a>";
+        return "<" + link + ">";
     }
 
 }

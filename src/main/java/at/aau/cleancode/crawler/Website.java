@@ -13,11 +13,13 @@ public class Website {
     private String title;
     private List<Heading> siteHeadings;
     private List<Link> siteLinks;
+    private int crawlDepth;
 
-    public Website(String siteLink) {
+    public Website(String siteLink, int crawlDepth) {
         this.url = new Link(siteLink);
         this.siteHeadings = new ArrayList<>();
         this.siteLinks = new ArrayList<>();
+        this.crawlDepth = crawlDepth;
     }
 
     public String getTitle(){
@@ -63,7 +65,11 @@ public class Website {
     }
 
     public String getUrl() {
-        return url;
+        return url.getHref();
+    }
+
+    public int getCrawlDepth() {
+        return crawlDepth;
     }
 }
 
