@@ -11,13 +11,13 @@ import java.util.List;
 public class Website {
     private final Link url;
     private String title;
-    private List<Heading> siteHeadings;
+    private List<Headline> siteHeadlines;
     private List<Link> siteLinks;
     private int crawlDepth;
 
     public Website(String siteLink, int crawlDepth) {
         this.url = new Link(siteLink);
-        this.siteHeadings = new ArrayList<>();
+        this.siteHeadlines = new ArrayList<>();
         this.siteLinks = new ArrayList<>();
         this.crawlDepth = crawlDepth;
     }
@@ -44,7 +44,7 @@ public class Website {
         for(int i = 1; i <= 6; i++){
             Elements heading = document.select("h"+i);
             for(Element head : heading){
-                this.siteHeadings.add(new Heading(head.text(), i));
+                this.siteHeadlines.add(new Headline(head.text(), i));
             }
         }
     }
@@ -56,8 +56,8 @@ public class Website {
         }
     }
 
-    public List<Heading> getHeadings(){
-        return this.siteHeadings;
+    public List<Headline> getHeadings(){
+        return this.siteHeadlines;
     }
 
     public List<Link> getLinks(){
