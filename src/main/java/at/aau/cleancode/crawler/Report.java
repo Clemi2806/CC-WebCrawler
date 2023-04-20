@@ -8,6 +8,12 @@ public class Report {
     private final String targetLanguage;
     private List<Website> websites;
 
+    public Report(Website website, String targetLanguage) {
+        this.startingSite = website;
+        this.targetLanguage = targetLanguage;
+        websites = new ArrayList<>();
+    }
+
     public Report(String startingSite, int crawlingDepth, String targetLanguage) {
         this.startingSite = new Website(startingSite, crawlingDepth);
         this.targetLanguage = targetLanguage;
