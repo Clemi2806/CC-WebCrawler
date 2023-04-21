@@ -27,7 +27,7 @@ public class Main {
         } catch (DeeplTranslatorException e) {
             System.out.println("Unable to create Translation service.");
         }
-        Report report = new Report(targetUrl, crawlDepth, targetLanguage);
+        Report report = new Report(targetUrl, crawlDepth);
         report.createReport();
         ReportWriter reportWriter;
         try {

@@ -94,4 +94,8 @@ public class DeeplTranslator {
         }
         return false;
     }
+
+    public String getTargetLanguage() {
+        return targetLanguage;
+    }
 }

@@ -5,19 +5,15 @@ import java.util.List;
 
 public class Report {
     private Website startingSite;
-    // wieso targetLanguage da?
-    private final String targetLanguage;
     private List<Website> websites;
 
     public Report(Website website, String targetLanguage) {
         this.startingSite = website;
-        this.targetLanguage = targetLanguage;
         websites = new ArrayList<>();
     }
 
-    public Report(String startingSite, int crawlingDepth, String targetLanguage) {
+    public Report(String startingSite, int crawlingDepth) {
         this.startingSite = new Website(startingSite, crawlingDepth);
-        this.targetLanguage = targetLanguage;
         websites = new ArrayList<>();
     }
 
@@ -32,7 +28,7 @@ public class Report {
             if(link.isBroken()){
                 continue;
             }
-            Report report = new Report(link.getHref(), this.startingSite.getCrawlDepth()-1, this.targetLanguage);
+            Report report = new Report(link.getHref(), this.startingSite.getCrawlDepth()-1);
             report.createReport();
             websites.addAll(report.getAllWebsites());
         }
@@ -50,9 +46,6 @@ public class Report {
         return this.startingSite.getCrawlDepth();
     }
 
-    public String getTargetLanguage() {
-        return targetLanguage;
-    }
 }
 
 

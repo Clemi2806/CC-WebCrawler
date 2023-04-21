@@ -65,14 +65,6 @@ class ReportTest {
         verify(mockStartingWebsite).getCrawlDepth();
     }
 
-    @Test
-    void getTargetLanguage() {
-        String targetLanguage = "EN-GB";
-        report = new Report("https://aau.at", 1, targetLanguage);
-
-        assertEquals(targetLanguage, report.getTargetLanguage());
-    }
-
     void initReport(){
         when(mockStartingWebsite.getCrawlDepth()).thenReturn(2);
         List<Link> links = new ArrayList<>();

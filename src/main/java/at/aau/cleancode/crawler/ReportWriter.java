@@ -40,10 +40,11 @@ public class ReportWriter {
 
     private String getMainInformation() {
         StringBuilder stringBuilder = new StringBuilder();
+
         stringBuilder
                 .append("input: ").append(wrapLink(report.getStartingSite())).append(NEWLINE)
                 .append(BREAK).append("depth: ").append(report.getCrawlingDepth()).append(NEWLINE)
-                .append(BREAK).append("target language: ").append(report.getTargetLanguage()).append(NEWLINE);
+                .append(BREAK).append("target language: ").append(translator.getTargetLanguage()).append(NEWLINE);
         return stringBuilder.toString();
     }
 
@@ -98,6 +99,7 @@ public class ReportWriter {
 
         return stringBuilder.toString();
     }
+
 
 
     private String getLinks(Website website, String indentation){
