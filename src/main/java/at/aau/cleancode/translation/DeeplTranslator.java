@@ -54,9 +54,10 @@ public class DeeplTranslator {
         translatedLanguages = new HashSet<>();
     }
 
-    public DeeplTranslator(Translator translator) {
+    public DeeplTranslator(Translator translator, String targetLanguage) {
         this.translator = translator;
         translatedLanguages = new HashSet<>();
+        this.targetLanguage = targetLanguage;
     }
 
     public String translate(String text) throws Exception {

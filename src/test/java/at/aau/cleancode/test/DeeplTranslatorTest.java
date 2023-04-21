@@ -9,8 +9,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +50,7 @@ public class DeeplTranslatorTest {
         TextResult result = mock(TextResult.class);
         when(result.getDetectedSourceLanguage()).thenReturn("DE");
         when(translator.translateText((String) any(), (String) any(),any())).thenReturn(result);
-        DeeplTranslator deeplTranslator = new DeeplTranslator(translator);
+        DeeplTranslator deeplTranslator = new DeeplTranslator(translator, "");
         deeplTranslator.translate("Hello");
 
         when(result.getDetectedSourceLanguage()).thenReturn("EN-GB");
@@ -70,5 +75,17 @@ public class DeeplTranslatorTest {
     @ValueSource(strings = {"de", "ef", "Deutsch", "Spaghetti", "1"})
     public void testUnsupportedLanguage(String lang){
         assertFalse(DeeplTranslator.isSupportedLanguage(lang));
+    }
+
+    @ParameterizedTest
+    @MethodSource("targetLanguageSource")
+    public void testTargetLanguage(String targetLanguage){
+        targetLanguage = targetLanguage.split(" - ")[0];
+        DeeplTranslator deeplTranslator = new DeeplTranslator(translator, targetLanguage);
+        assertEquals(targetLanguage, deeplTranslator.getTargetLanguage());
+    }
+
+    private static Stream<String> targetLanguageSource(){
+        return Stream.of(DeeplTranslator.supportedLanguages);
     }
 }
