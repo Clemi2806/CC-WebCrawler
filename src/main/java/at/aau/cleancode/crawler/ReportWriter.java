@@ -17,17 +17,21 @@ public class ReportWriter {
     private static final String RULE = "___\n";
     private static final String BREAK = "<br>";
 
-    public ReportWriter(Report report, DeeplTranslator translator) throws IOException {
+    public ReportWriter(Report report, DeeplTranslator translator, BufferedWriter writer) throws IOException {
         this.report = report;
         this.translator = translator;
         long currentTime = System.currentTimeMillis();
-        this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
+        if(writer == null){
+            this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
+        }else{
+            this.writer = writer;
+        }
     }
 
     public void writeReport() throws IOException {
         writer.append(getMainInformation());
         List<String> parsedWebsites = new ArrayList<>();
-        for(Website website : report.websites){
+        for(Website website : report.getAllWebsites()){
             parsedWebsites.add(getWebsiteInformation(website));
         }
         writer.append(getSourceLanguages());
@@ -78,7 +82,7 @@ public class ReportWriter {
 
     private String getHeadings(Website website, String indentation){
         StringBuilder stringBuilder = new StringBuilder();
-        for(Heading heading :website.getHeadings()){
+        for(Heading heading : website.getHeadings()){
             stringBuilder.append("#".repeat(Math.max(0, heading.getDepth())));
             String headingText = heading.getHeading();
             boolean isTranslated = true;
