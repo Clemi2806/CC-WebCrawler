@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class WebsiteTest {
@@ -28,7 +29,7 @@ class WebsiteTest {
     Website website;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         mockSiteUrl = mock(Link.class);
         workingLink = mock(Link.class);
         brokenLink = mock(Link.class);

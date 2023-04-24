@@ -20,21 +20,23 @@ public class Report {
     public void createReport() {
         startingSite.crawlWebsite();
         websites.add(startingSite);
-        if(this.startingSite.getCrawlDepth() <= 1){
+        if (this.startingSite.getCrawlDepth() <= 1) {
             return;
         }
-        for(Link link : startingSite.getLinks()){
+        for (Link link : startingSite.getLinks()) {
 
-            if(link.isBroken()){
+            if (link.isBroken()) {
                 continue;
             }
-            Report report = new Report(link.getHref(), this.startingSite.getCrawlDepth()-1);
+            // create reports for every sublink
+            Report report = new Report(link.getHref(), this.startingSite.getCrawlDepth() - 1);
             report.createReport();
+            // merge subreports
             websites.addAll(report.getAllWebsites());
         }
     }
 
-    public List<Website> getAllWebsites(){
+    public List<Website> getAllWebsites() {
         return this.websites;
     }
 

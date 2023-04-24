@@ -21,7 +21,8 @@ public class ReportWriter {
         this.report = report;
         this.translator = translator;
         long currentTime = System.currentTimeMillis();
-        if(writer == null){
+        // Set the writer to a specific writer for testing, else null
+        if (writer == null) {
             this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
         } else {
             this.writer = writer;
@@ -31,11 +32,11 @@ public class ReportWriter {
     public void writeReport() throws IOException {
         writer.append(getMainInformation());
         List<String> parsedWebsites = new ArrayList<>();
-        for(Website website : report.getAllWebsites()){
+        for (Website website : report.getAllWebsites()) {
             parsedWebsites.add(getWebsiteInformation(website));
         }
         writer.append(getSourceLanguages());
-        for(String websiteString : parsedWebsites){
+        for (String websiteString : parsedWebsites) {
             writer.append(websiteString);
         }
         writer.flush();
@@ -52,10 +53,10 @@ public class ReportWriter {
         return stringBuilder.toString();
     }
 
-    private String getSourceLanguages(){
+    private String getSourceLanguages() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(BREAK).append("source languages: ");
-        for(String lang : translator.getTranslatedLanguages()){
+        for (String lang : translator.getTranslatedLanguages()) {
             stringBuilder.append(lang).append(" ");
         }
 
@@ -81,9 +82,9 @@ public class ReportWriter {
         return stringBuilder.toString();
     }
 
-    private String getHeadings(Website website, String indentation){
+    private String getHeadings(Website website, String indentation) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(Headline headline :website.getHeadlines()){
+        for (Headline headline : website.getHeadlines()) {
             stringBuilder.append("#".repeat(Math.max(0, headline.getDepth())));
             String headingText = headline.getHeading();
             boolean isTranslated = true;
@@ -105,14 +106,13 @@ public class ReportWriter {
     }
 
 
-
-    private String getLinks(Website website, String indentation){
+    private String getLinks(Website website, String indentation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(NEWLINE).append("---").append(NEWLINE);
 
-        for(Link link : website.getLinks()){
+        for (Link link : website.getLinks()) {
             stringBuilder.append(BREAK).append(indentation).append(wrapLink(link.getHref()));
-            if(link.isBroken()){
+            if (link.isBroken()) {
                 stringBuilder.append(" broken link");
             }
             stringBuilder.append(NEWLINE);
@@ -120,7 +120,8 @@ public class ReportWriter {
 
         return stringBuilder.toString();
     }
-    private String wrapLink(String link){
+
+    private String wrapLink(String link) {
         return "<" + link + ">";
     }
 

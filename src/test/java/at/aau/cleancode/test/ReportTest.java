@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ReportTest {
@@ -21,7 +21,7 @@ class ReportTest {
     Report report;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         mockStartingWebsite = mock(Website.class);
         mockReport = mock(Report.class);
         mockLink = mock(Link.class);
@@ -68,7 +68,7 @@ class ReportTest {
         verify(mockStartingWebsite).getCrawlDepth();
     }
 
-    void initReport(){
+    void initReport() {
         when(mockStartingWebsite.getCrawlDepth()).thenReturn(2);
         List<Link> links = new ArrayList<>();
         links.add(mockLink);

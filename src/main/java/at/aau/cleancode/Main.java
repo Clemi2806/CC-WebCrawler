@@ -1,6 +1,5 @@
 package at.aau.cleancode;
 
-import at.aau.cleancode.crawler.Crawler;
 import at.aau.cleancode.crawler.Report;
 import at.aau.cleancode.crawler.ReportWriter;
 import at.aau.cleancode.translation.DeeplAPIUtils;
@@ -44,7 +43,7 @@ public class Main {
         }
     }
 
-    public static String readTargetUrl(){
+    public static String readTargetUrl() {
         String url = "";
         do {
             System.out.print("Enter URL to crawl e.g. (https://example.com): ");
@@ -53,16 +52,16 @@ public class Main {
         return url;
     }
 
-    public static int readCrawlDepth(){
+    public static int readCrawlDepth() {
         System.out.print("Enter crawl depth (default 2): ");
         int crawlDepth = 2;
         String enteredDepth = userInputScanner.nextLine();
-        try{
+        try {
             crawlDepth = Integer.parseInt(enteredDepth);
-            if(crawlDepth < 1){
+            if (crawlDepth < 1) {
                 throw new IllegalArgumentException();
             }
-        } catch (IllegalArgumentException nfe){
+        } catch (IllegalArgumentException nfe) {
             System.out.println("Invalid depth continuing with default (2)");
             crawlDepth = 2;
         }
@@ -70,19 +69,19 @@ public class Main {
         return crawlDepth;
     }
 
-    public static String readTargetLanguage(){
+    public static String readTargetLanguage() {
         System.out.println("Enter the target language, following languages are available: ");
         DeeplTranslator.printTargetLanguages();
         boolean isSupportedLanguage;
         String targetLanguage;
-        do{
+        do {
             System.out.print("Enter your preferred language, ex. DE: ");
             targetLanguage = userInputScanner.nextLine();
             isSupportedLanguage = DeeplTranslator.isSupportedLanguage(targetLanguage);
-            if(!isSupportedLanguage){
+            if (!isSupportedLanguage) {
                 System.out.println("Unsupported language. Please select one from the list and enter the shortcode.");
             }
-        } while(!isSupportedLanguage);
+        } while (!isSupportedLanguage);
 
         return targetLanguage;
     }
