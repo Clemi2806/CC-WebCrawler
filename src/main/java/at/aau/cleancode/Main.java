@@ -28,6 +28,7 @@ public class Main {
             System.out.println("Unable to create Translation service.");
         }
         Report report = new Report(targetUrl, crawlDepth);
+        System.out.println("Crawling website ... this may take a while!");
         report.createReport();
         ReportWriter reportWriter;
         try {
