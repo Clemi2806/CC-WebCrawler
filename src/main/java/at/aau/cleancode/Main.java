@@ -1,9 +1,13 @@
 package at.aau.cleancode;
 
+import at.aau.cleancode.crawler.Crawler;
+import at.aau.cleancode.crawler.Report;
+import at.aau.cleancode.crawler.ReportWriter;
 import at.aau.cleancode.translation.DeeplAPIUtils;
 import at.aau.cleancode.translation.DeeplTranslator;
 import at.aau.cleancode.translation.DeeplTranslatorException;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -17,20 +21,39 @@ public class Main {
         String targetLanguage = readTargetLanguage();
 
         String translationApiKey = DeeplAPIUtils.loadApiKey();
+        DeeplTranslator translator = null;
         try {
-            DeeplTranslator translator = new DeeplTranslator(targetLanguage, translationApiKey);
+            translator = new DeeplTranslator(targetLanguage, translationApiKey);
         } catch (DeeplTranslatorException e) {
-            e.printStackTrace();
+            System.out.println("Unable to create Translation service.");
+        }
+        Report report = new Report(targetUrl, crawlDepth);
+        report.createReport();
+        ReportWriter reportWriter;
+        try {
+            reportWriter = new ReportWriter(report, translator, null); // use null to use default writer
+        } catch (IOException e) {
+            System.out.println("Unable to create report file!");
+            return;
+        }
+        try {
+            reportWriter.writeReport();
+        } catch (IOException e) {
+            System.out.println("Unable to write report file!");
         }
     }
 
     public static String readTargetUrl(){
-        System.out.print("Enter URL to crawl: ");
-        return userInputScanner.nextLine();
+        String url = "";
+        do {
+            System.out.print("Enter URL to crawl e.g. (https://example.com): ");
+            url = userInputScanner.nextLine();
+        } while (!url.matches("https?://.*"));
+        return url;
     }
 
     public static int readCrawlDepth(){
-        System.out.println("Enter crawl depth (default 2): ");
+        System.out.print("Enter crawl depth (default 2): ");
         int crawlDepth = 2;
         String enteredDepth = userInputScanner.nextLine();
         try{

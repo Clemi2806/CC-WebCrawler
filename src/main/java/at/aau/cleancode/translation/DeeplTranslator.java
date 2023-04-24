@@ -4,6 +4,7 @@ import com.deepl.api.TextResult;
 import com.deepl.api.Translator;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class DeeplTranslator {
@@ -53,9 +54,10 @@ public class DeeplTranslator {
         translatedLanguages = new HashSet<>();
     }
 
-    public DeeplTranslator(Translator translator) {
+    public DeeplTranslator(Translator translator, String targetLanguage) {
         this.translator = translator;
         translatedLanguages = new HashSet<>();
+        this.targetLanguage = targetLanguage;
     }
 
     public String translate(String text) throws Exception {
@@ -70,7 +72,7 @@ public class DeeplTranslator {
             for(String supportedLanguage : supportedLanguages){
                 String shortcode = supportedLanguage.split(" - ")[0];
                 String languageName = supportedLanguage.split(" - ")[1];
-                if(shortcode.equals(language)){
+                if(shortcode.equalsIgnoreCase(language)){
                     languages.add(languageName);
                 }
             }
@@ -92,5 +94,9 @@ public class DeeplTranslator {
             }
         }
         return false;
+    }
+
+    public String getTargetLanguage() {
+        return targetLanguage;
     }
 }
