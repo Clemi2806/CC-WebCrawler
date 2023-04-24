@@ -1,5 +1,6 @@
-package at.aau.cleancode.crawler;
+package at.aau.cleancode.test;
 
+import at.aau.cleancode.crawler.Headline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

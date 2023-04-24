@@ -17,11 +17,15 @@ public class ReportWriter {
     private static final String RULE = "___\n";
     private static final String BREAK = "<br>";
 
-    public ReportWriter(Report report, DeeplTranslator translator) throws IOException {
+    public ReportWriter(Report report, DeeplTranslator translator, BufferedWriter writer) throws IOException {
         this.report = report;
         this.translator = translator;
         long currentTime = System.currentTimeMillis();
-        this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
+        if(writer == null){
+            this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
+        } else {
+            this.writer = writer;
+        }
     }
 
     public void writeReport() throws IOException {

@@ -24,8 +24,8 @@ class ReportWriterTest {
     static BufferedWriter writer;
     static Report report;
     static Website website;
-    static Heading h1;
-    static Heading h2;
+    static Headline h1;
+    static Headline h2;
     static Link link;
     static Link brokenLink;
 
@@ -42,9 +42,9 @@ class ReportWriterTest {
         when(website.getCrawlDepth()).thenReturn(1);
         when(website.getUrl()).thenReturn("https://www.test.at");
         when(website.getTitle()).thenReturn("Title");
-        h1 = new Heading("H1", 1);
-        h2 = new Heading("H2", 2);
-        when(website.getHeadings()).thenReturn(List.of(h1, h2));
+        h1 = new Headline("H1", 1);
+        h2 = new Headline("H2", 2);
+        when(website.getHeadlines()).thenReturn(List.of(h1, h2));
         link = mock(Link.class);
         brokenLink = mock(Link.class);
         when(link.isBroken()).thenReturn(false);
@@ -55,7 +55,6 @@ class ReportWriterTest {
         when(report.getAllWebsites()).thenReturn(List.of(website));
         when(report.getStartingSite()).thenReturn("https://www.test.at");
         when(report.getCrawlingDepth()).thenReturn(1);
-        when(report.getTargetLanguage()).thenReturn("EN-GB");
         when(translator.getTranslatedLanguages()).thenReturn(Set.of("German", "Portuguese"));
         when(translator.translate(h1.getHeading())).thenReturn("h1");
         when(translator.translate(h2.getHeading())).thenThrow(new Exception());
@@ -68,13 +67,12 @@ class ReportWriterTest {
 
         verify(report).getAllWebsites();
         verify(report).getStartingSite();
-        verify(report).getTargetLanguage();
         verify(report, times(2)).getCrawlingDepth();
 
         verify(website).getCrawlDepth();
         verify(website).getUrl();
         verify(website).getTitle();
-        verify(website).getHeadings();
+        verify(website).getHeadlines();
         verify(website).getLinks();
 
         verify(translator).translate(h1.getHeading());

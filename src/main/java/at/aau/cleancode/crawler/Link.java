@@ -35,7 +35,7 @@ public class Link {
             connection.connect();
 
             int responseCode = connection.getResponseCode();
-            return responseCode != 200;
+            return (responseCode >= 400);
         } catch (Exception e) {
             return true;
         }

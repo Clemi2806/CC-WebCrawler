@@ -1,5 +1,8 @@
-package at.aau.cleancode.crawler;
+package at.aau.cleancode.test;
 
+import at.aau.cleancode.crawler.Crawler;
+import at.aau.cleancode.crawler.Link;
+import at.aau.cleancode.crawler.Website;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

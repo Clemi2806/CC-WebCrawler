@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -18,19 +19,29 @@ public class UserInputTest {
 
     static Scanner userInputScanner;
 
-    @BeforeAll
-    public static void initMockSystemIn(){
+    @BeforeEach
+    public void createMock(){
         userInputScanner = mock(Scanner.class);
         Main.userInputScanner = userInputScanner;
     }
 
-    @BeforeEach
-    public void resetMock(){
-        reset(userInputScanner);
+    @Test
+    public void testTargetLanguage(){
+        createMock(); // Is not necessary, but mvn test won't pass because userInputScanner is null
+        when(userInputScanner.nextLine()).then(new Answer<String>() {
+            int count = 0;
+            @Override
+            public String answer(InvocationOnMock invocationOnMock) throws Throwable {
+                return count++ == 0 ? "dsa" : "DE";
+            }
+        });
+        String lang = Main.readTargetLanguage();
+        verify(userInputScanner, times(2)).nextLine();
+        assertEquals(lang, "DE");
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"www.example.com", "www.test.net", "www.abc.at"})
+    @ValueSource(strings = {"https://www.example.com", "https://www.test.net", "http://www.abc.at"})
     public void testUrl(String url){
         when(userInputScanner.nextLine()).thenReturn(url);
         String targetUrl = Main.readTargetUrl();
@@ -56,18 +67,6 @@ public class UserInputTest {
         verify(userInputScanner).nextLine();
     }
 
-    @Test
-    public void testTargetLanguage(){
-        when(userInputScanner.nextLine()).then(new Answer<String>() {
-            int count = 0;
-            @Override
-            public String answer(InvocationOnMock invocationOnMock) throws Throwable {
-                return count++ == 0 ? "dsa" : "DE";
-            }
-        });
-        String lang = Main.readTargetLanguage();
-        verify(userInputScanner, times(2)).nextLine();
-        assertEquals(lang, "DE");
-    }
+
 
 }

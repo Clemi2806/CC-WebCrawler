@@ -7,7 +7,7 @@ public class Report {
     private Website startingSite;
     private List<Website> websites;
 
-    public Report(Website website, String targetLanguage) {
+    public Report(Website website) {
         this.startingSite = website;
         websites = new ArrayList<>();
     }

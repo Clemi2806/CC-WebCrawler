@@ -44,8 +44,12 @@ public class Main {
     }
 
     public static String readTargetUrl(){
-        System.out.print("Enter URL to crawl: ");
-        return userInputScanner.nextLine();
+        String url = "";
+        do {
+            System.out.print("Enter URL to crawl e.g. (https://example.com): ");
+            url = userInputScanner.nextLine();
+        } while (!url.matches("https?://.*"));
+        return url;
     }
 
     public static int readCrawlDepth(){

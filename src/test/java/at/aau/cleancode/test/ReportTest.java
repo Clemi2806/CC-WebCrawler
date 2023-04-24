@@ -1,5 +1,8 @@
-package at.aau.cleancode.crawler;
+package at.aau.cleancode.test;
 
+import at.aau.cleancode.crawler.Link;
+import at.aau.cleancode.crawler.Report;
+import at.aau.cleancode.crawler.Website;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +75,7 @@ class ReportTest {
         when(mockStartingWebsite.getLinks()).thenReturn(links);
         when(mockLink.isBroken()).thenReturn(true);
 
-        report = new Report(mockStartingWebsite, "DE");
+        report = new Report(mockStartingWebsite);
     }
 
 
