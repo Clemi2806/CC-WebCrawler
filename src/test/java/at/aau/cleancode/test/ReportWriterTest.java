@@ -3,19 +3,12 @@ package at.aau.cleancode.test;
 import at.aau.cleancode.crawler.*;
 import at.aau.cleancode.translation.DeeplTranslator;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedWriter;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ReportWriterTest {
@@ -59,6 +52,7 @@ class ReportWriterTest {
         when(translator.translate(h1.getHeading())).thenReturn("h1");
         when(translator.translate(h2.getHeading())).thenThrow(new Exception());
     }
+
     @Test
     void writeReport() throws Exception {
         BufferedWriter writer = mock(BufferedWriter.class);

@@ -20,14 +20,14 @@ public class Link {
         return href;
     }
 
-    public void setConnection(HttpURLConnection connection){
+    public void setConnection(HttpURLConnection connection) {
         this.connection = connection;
     }
 
     private boolean isBrokenUrl(String href) {
         try {
             URL url = new URL(href);
-            if(connection == null){
+            if (connection == null) {
                 connection = (HttpURLConnection) url.openConnection();
             }
 
