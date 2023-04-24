@@ -17,15 +17,11 @@ public class ReportWriter {
     private static final String RULE = "___\n";
     private static final String BREAK = "<br>";
 
-    public ReportWriter(Report report, DeeplTranslator translator, BufferedWriter writer) throws IOException {
+    public ReportWriter(Report report, DeeplTranslator translator) throws IOException {
         this.report = report;
         this.translator = translator;
         long currentTime = System.currentTimeMillis();
-        if(writer == null){
-            this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
-        }else{
-            this.writer = writer;
-        }
+        this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
     }
 
     public void writeReport() throws IOException {
@@ -44,10 +40,11 @@ public class ReportWriter {
 
     private String getMainInformation() {
         StringBuilder stringBuilder = new StringBuilder();
+
         stringBuilder
                 .append("input: ").append(wrapLink(report.getStartingSite())).append(NEWLINE)
                 .append(BREAK).append("depth: ").append(report.getCrawlingDepth()).append(NEWLINE)
-                .append(BREAK).append("target language: ").append(report.getTargetLanguage()).append(NEWLINE);
+                .append(BREAK).append("target language: ").append(translator.getTargetLanguage()).append(NEWLINE);
         return stringBuilder.toString();
     }
 
@@ -82,9 +79,9 @@ public class ReportWriter {
 
     private String getHeadings(Website website, String indentation){
         StringBuilder stringBuilder = new StringBuilder();
-        for(Heading heading : website.getHeadings()){
-            stringBuilder.append("#".repeat(Math.max(0, heading.getDepth())));
-            String headingText = heading.getHeading();
+        for(Headline headline :website.getHeadlines()){
+            stringBuilder.append("#".repeat(Math.max(0, headline.getDepth())));
+            String headingText = headline.getHeading();
             boolean isTranslated = true;
             try {
                 headingText = translator.translate(headingText);
@@ -102,6 +99,7 @@ public class ReportWriter {
 
         return stringBuilder.toString();
     }
+
 
 
     private String getLinks(Website website, String indentation){

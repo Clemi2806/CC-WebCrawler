@@ -5,32 +5,41 @@ import java.net.URL;
 
 public class Link {
     private final String href;
-    private final boolean isBroken;
+    private HttpURLConnection connection;
 
     public Link(String href) {
         this.href = href;
-        this.isBroken = isBrokenUrl(href);
+        connection = null;
     }
 
     public boolean isBroken() {
-        return isBroken;
+        return isBrokenUrl(this.href);
     }
 
     public String getHref() {
         return href;
     }
 
+    public void setConnection(HttpURLConnection connection){
+        this.connection = connection;
+    }
+
     private boolean isBrokenUrl(String href) {
         try {
             URL url = new URL(href);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.connect();
+            if(connection == null){
+                connection = (HttpURLConnection) url.openConnection();
+            }
 
-            int responseCode = conn.getResponseCode();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            int responseCode = connection.getResponseCode();
             return responseCode != 200;
         } catch (Exception e) {
             return true;
         }
     }
+
+
 }

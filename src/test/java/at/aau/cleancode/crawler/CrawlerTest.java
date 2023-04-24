@@ -12,11 +12,6 @@ class CrawlerTest {
 
     @Test
     void getDocument() {
-        try {
-            Document doc = Crawler.getDocument("http://www.wikipedia.org");
-            System.out.println(doc);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }
