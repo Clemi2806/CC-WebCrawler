@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Crawler {
 
-    public Crawler(){
+    public Crawler() {
         super();
     }
 

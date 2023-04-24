@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class LinkTest {
 
@@ -19,7 +20,7 @@ class LinkTest {
     HttpURLConnection mockConnection;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         mockConnection = mock(HttpURLConnection.class);
         link = null;
     }
@@ -28,18 +29,18 @@ class LinkTest {
     @MethodSource("linkSource")
     void testGetters(String href, boolean expectedBroken) throws IOException {
         int responseCode = 200;
-        if(expectedBroken)
+        if (expectedBroken)
             responseCode = 404;
 
         when(mockConnection.getResponseCode()).thenReturn(responseCode);
         link = new Link(href);
-
+        link.setConnection(mockConnection);
 
         assertEquals(href, link.getHref());
         assertEquals(expectedBroken, link.isBroken());
     }
 
-    private static Stream<Arguments> linkSource(){
+    private static Stream<Arguments> linkSource() {
         return Stream.of(
                 Arguments.of("github", true),
                 Arguments.of("https://google.com", false),

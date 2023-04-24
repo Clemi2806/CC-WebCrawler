@@ -4,7 +4,6 @@ import com.deepl.api.TextResult;
 import com.deepl.api.Translator;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 public class DeeplTranslator {
@@ -47,8 +46,8 @@ public class DeeplTranslator {
     private Set<String> translatedLanguages;
 
     public DeeplTranslator(String targetLanguage, String apikey) throws DeeplTranslatorException {
-        if(apikey == null) throw new DeeplTranslatorException("API Key was null");
-        if(!isSupportedLanguage(targetLanguage)) throw new DeeplTranslatorException("Invalid target language!");
+        if (apikey == null) throw new DeeplTranslatorException("API Key was null");
+        if (!isSupportedLanguage(targetLanguage)) throw new DeeplTranslatorException("Invalid target language!");
         this.targetLanguage = targetLanguage;
         translator = new Translator(apikey);
         translatedLanguages = new HashSet<>();
@@ -68,11 +67,11 @@ public class DeeplTranslator {
 
     public Set<String> getTranslatedLanguages() {
         Set<String> languages = new HashSet<>();
-        for(String language : translatedLanguages){
-            for(String supportedLanguage : supportedLanguages){
+        for (String language : translatedLanguages) {
+            for (String supportedLanguage : supportedLanguages) {
                 String shortcode = supportedLanguage.split(" - ")[0];
                 String languageName = supportedLanguage.split(" - ")[1];
-                if(shortcode.equalsIgnoreCase(language)){
+                if (shortcode.equalsIgnoreCase(language)) {
                     languages.add(languageName);
                 }
             }
@@ -82,14 +81,14 @@ public class DeeplTranslator {
     }
 
     public static void printTargetLanguages() {
-        for(String lang : supportedLanguages){
+        for (String lang : supportedLanguages) {
             System.out.println(lang);
         }
     }
 
-    public static boolean isSupportedLanguage(String selectedLanguage){
-        for(String lang : supportedLanguages){
-            if(selectedLanguage.equals(lang.split(" - ")[0])){
+    public static boolean isSupportedLanguage(String selectedLanguage) {
+        for (String lang : supportedLanguages) {
+            if (selectedLanguage.equals(lang.split(" - ")[0])) {
                 return true;
             }
         }

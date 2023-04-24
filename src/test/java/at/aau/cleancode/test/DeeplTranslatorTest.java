@@ -2,19 +2,14 @@ package at.aau.cleancode.test;
 
 import at.aau.cleancode.translation.DeeplTranslator;
 import at.aau.cleancode.translation.DeeplTranslatorException;
-import com.deepl.api.DeepLException;
 import com.deepl.api.TextResult;
 import com.deepl.api.Translator;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +21,7 @@ public class DeeplTranslatorTest {
     Translator translator = mock(Translator.class);
 
     @BeforeEach
-    public void resetMocks(){
+    public void resetMocks() {
         reset(translator);
     }
 
@@ -36,36 +31,40 @@ public class DeeplTranslatorTest {
     }
 
     @Test
-    public void createTranslatorWithNoApiKey(){
-        assertThrows(DeeplTranslatorException.class, () -> {new DeeplTranslator("", null);});
+    public void createTranslatorWithNoApiKey() {
+        assertThrows(DeeplTranslatorException.class, () -> {
+            new DeeplTranslator("", null);
+        });
     }
 
     @Test
-    public void createTranslatorWithInvalidTargetLanguage(){
-        assertThrows(DeeplTranslatorException.class, () -> {new DeeplTranslator("", "apikey");});
+    public void createTranslatorWithInvalidTargetLanguage() {
+        assertThrows(DeeplTranslatorException.class, () -> {
+            new DeeplTranslator("", "apikey");
+        });
     }
 
     @Test
     public void testTranslatedLanguages() throws Exception {
         TextResult result = mock(TextResult.class);
         when(result.getDetectedSourceLanguage()).thenReturn("DE");
-        when(translator.translateText((String) any(), (String) any(),any())).thenReturn(result);
+        when(translator.translateText((String) any(), (String) any(), any())).thenReturn(result);
         DeeplTranslator deeplTranslator = new DeeplTranslator(translator, "");
         deeplTranslator.translate("Hello");
 
         when(result.getDetectedSourceLanguage()).thenReturn("EN-GB");
-        when(translator.translateText((String) any(), (String) any(),any())).thenReturn(result);
+        when(translator.translateText((String) any(), (String) any(), any())).thenReturn(result);
         deeplTranslator.translate("Hello2you");
 
-        verify(translator, times(2)).translateText((String) any(), (String) any(),any());
+        verify(translator, times(2)).translateText((String) any(), (String) any(), any());
         assertEquals(2, deeplTranslator.getTranslatedLanguages().size());
         assertTrue(deeplTranslator.getTranslatedLanguages().contains("German"));
         assertTrue(deeplTranslator.getTranslatedLanguages().contains("English (British)"));
     }
 
     @Test
-    public void testSupportedLanguages(){
-        for(String lang : DeeplTranslator.supportedLanguages){
+    public void testSupportedLanguages() {
+        for (String lang : DeeplTranslator.supportedLanguages) {
             String shortcode = lang.split(" - ")[0];
             assertTrue(DeeplTranslator.isSupportedLanguage(shortcode));
         }
@@ -73,19 +72,19 @@ public class DeeplTranslatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"de", "ef", "Deutsch", "Spaghetti", "1"})
-    public void testUnsupportedLanguage(String lang){
+    public void testUnsupportedLanguage(String lang) {
         assertFalse(DeeplTranslator.isSupportedLanguage(lang));
     }
 
     @ParameterizedTest
     @MethodSource("targetLanguageSource")
-    public void testTargetLanguage(String targetLanguage){
+    public void testTargetLanguage(String targetLanguage) {
         targetLanguage = targetLanguage.split(" - ")[0];
         DeeplTranslator deeplTranslator = new DeeplTranslator(translator, targetLanguage);
         assertEquals(targetLanguage, deeplTranslator.getTargetLanguage());
     }
 
-    private static Stream<String> targetLanguageSource(){
+    private static Stream<String> targetLanguageSource() {
         return Stream.of(DeeplTranslator.supportedLanguages);
     }
 }

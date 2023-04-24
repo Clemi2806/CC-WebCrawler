@@ -1,7 +1,7 @@
 package at.aau.cleancode.translation;
 
-public class DeeplTranslatorException extends Exception{
-    public DeeplTranslatorException(){
+public class DeeplTranslatorException extends Exception {
+    public DeeplTranslatorException() {
         super();
     }
 
