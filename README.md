@@ -9,4 +9,8 @@ a `crawler.properties` file in the root folder. Append the following line to the
 After that run the `mvn package` command to create a runnable jar. When the command has run the runnable is in
 the `target` folder.
 
-Please execute the runnable jar with dependencies.
+Please execute the runnable jar **_with_** dependencies.
+
+To run the tests for the classes use the `mvn test` command.
+
+If you are using IntelliJ, the app can be started by using the run icon in the `Main` file.
