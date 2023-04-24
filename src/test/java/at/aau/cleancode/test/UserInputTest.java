@@ -6,7 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.Scanner;
 
@@ -53,6 +54,20 @@ public class UserInputTest {
         int crawlDepth = Main.readCrawlDepth();
         assertEquals(2, crawlDepth);
         verify(userInputScanner).nextLine();
+    }
+
+    @Test
+    public void testTargetLanguage(){
+        when(userInputScanner.nextLine()).then(new Answer<String>() {
+            int count = 0;
+            @Override
+            public String answer(InvocationOnMock invocationOnMock) throws Throwable {
+                return count++ == 0 ? "dsa" : "DE";
+            }
+        });
+        String lang = Main.readTargetLanguage();
+        verify(userInputScanner, times(2)).nextLine();
+        assertEquals(lang, "DE");
     }
 
 }

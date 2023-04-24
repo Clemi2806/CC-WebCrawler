@@ -31,7 +31,7 @@ public class Main {
         report.createReport();
         ReportWriter reportWriter;
         try {
-            reportWriter = new ReportWriter(report, translator);
+            reportWriter = new ReportWriter(report, translator, null); // use null to use default writer
         } catch (IOException e) {
             System.out.println("Unable to create report file!");
             return;
