@@ -8,7 +8,7 @@ public class Report {
     private final Link startingSite;
     private final int crawlingDepth;
     private final String targetLanguage;
-    List<Website> websites;
+    private List<Website> websites;
 
     public Report(String startingSite, int crawlingDepth, String targetLanguage) {
         this.startingSite = new Link(startingSite);
