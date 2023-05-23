@@ -9,5 +9,5 @@ public interface Crawler {
 
     List<Link> getLinks() throws IOException;
 
-    String getHeadline() throws IOException;
+    String getTitle() throws IOException;
 }

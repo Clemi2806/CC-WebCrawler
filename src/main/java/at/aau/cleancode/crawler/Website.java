@@ -1,9 +1,5 @@
 package at.aau.cleancode.crawler;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +52,7 @@ public class Website {
             if (crawler == null) {
                 crawler = new JsoupCrawler(this.url.getHref());
             }
-            this.title = crawler.getHeadline();
+            this.title = crawler.getTitle();
             this.siteHeadlines = crawler.getHeadlines();
             this.siteLinks = crawler.getLinks();
         } catch (IOException e) {

@@ -54,7 +54,7 @@ public class JsoupCrawler implements Crawler{
     }
 
     @Override
-    public String getHeadline() throws IOException {
+    public String getTitle() throws IOException {
         return getDocument().title();
     }
 }
