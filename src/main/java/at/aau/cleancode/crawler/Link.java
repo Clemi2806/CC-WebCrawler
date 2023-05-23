@@ -5,15 +5,18 @@ import java.net.URL;
 
 public class Link {
     private final String href;
+    private boolean isBroken;
     private HttpURLConnection connection;
 
     public Link(String href) {
         this.href = href;
+        isBroken = true;
         connection = null;
     }
 
     public boolean isBroken() {
-        return isBrokenUrl(this.href);
+        // when a link is considered broken, checking if it is still unreachable
+        return this.isBroken ? (this.isBroken = isBrokenUrl(this.href)) : false;
     }
 
     public String getHref() {
