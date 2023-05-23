@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class WebsiteTest {
@@ -19,18 +18,17 @@ class WebsiteTest {
     Link workingLink;
     Link brokenLink;
     Crawler mockJsoupCrawler;
-    Link linkElement;
-    Headline headerElement;
+    Link mockWebsiteLink;
+    Headline mockHeader;
     Website website;
 
     @BeforeEach
     void setUp() {
         mockSiteUrl = mock(Link.class);
         workingLink = mock(Link.class);
-        brokenLink = mock(Link.class);
         mockJsoupCrawler = mock(JsoupCrawler.class);
-        linkElement = mock(Link.class);
-        headerElement = mock(Headline.class);
+        mockWebsiteLink = mock(Link.class);
+        mockHeader = mock(Headline.class);
 
         website = null;
     }
@@ -48,6 +46,8 @@ class WebsiteTest {
         website.crawlWebsite();
 
         assertEquals(websiteTitle, website.getTitle());
+
+        verify(mockJsoupCrawler).getTitle();
     }
 
     @Test
@@ -59,6 +59,28 @@ class WebsiteTest {
         website.crawlWebsite();
 
         //verify
+        verify(mockJsoupCrawler).getTitle();
+        verify(mockJsoupCrawler).getHeadlines();
+        verify(mockJsoupCrawler).getLinks();
+    }
+
+    void setUpBrokenWebsite(){
+        brokenLink = mock(Link.class);
+        website = new Website(brokenLink, 1);
+        when(brokenLink.isBroken()).thenReturn(true);
+        when(brokenLink.getHref()).thenReturn("ioexception.org");
+    }
+    @Test
+    void crawlBrokenWebsite() {
+        setUpBrokenWebsite();
+
+        website.crawlWebsite();
+
+        assertTrue(website.getLinks().isEmpty());
+        assertTrue(website.getHeadlines().isEmpty());
+
+        verify(brokenLink).isBroken();
+        verify(brokenLink).getHref();
     }
 
     @Test
@@ -68,6 +90,8 @@ class WebsiteTest {
         website.crawlWebsite();
 
         assertEquals(1, website.getHeadlines().size());
+
+        verify(mockJsoupCrawler).getHeadlines();
     }
 
     @Test
@@ -77,6 +101,8 @@ class WebsiteTest {
         website.crawlWebsite();
 
         assertEquals(1, website.getLinks().size());
+
+        verify(mockJsoupCrawler).getLinks();
     }
 
     @Test
@@ -94,16 +120,16 @@ class WebsiteTest {
     }
 
     void initWebsite() throws IOException {
-        when(headerElement.getHeading()).thenReturn("Header Text");
-        when(linkElement.getHref()).thenReturn("A href");
+        when(mockHeader.getHeading()).thenReturn("Header Text");
 
         List<Link> linkElements = new ArrayList<>();
         linkElements.add(workingLink);
         List<Headline> headerElements = new ArrayList<>();
-        headerElements.add(headerElement);
+        headerElements.add(mockHeader);
 
         website = new Website(mockSiteUrl, 1);
         when(mockSiteUrl.isBroken()).thenReturn(false);
+        when(mockSiteUrl.getHref()).thenReturn("A href");
         website.setCrawler(mockJsoupCrawler);
 
         when(mockJsoupCrawler.getTitle()).thenReturn(websiteTitle);
