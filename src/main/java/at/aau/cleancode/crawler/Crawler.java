@@ -1,17 +1,13 @@
 package at.aau.cleancode.crawler;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
 import java.io.IOException;
+import java.util.List;
 
-public class Crawler {
+public interface Crawler {
 
-    public Crawler() {
-        super();
-    }
+    List<Headline> getHeadlines() throws IOException;
 
-    public Document getDocument(String url) throws IOException {
-        return Jsoup.connect(url).get();
-    }
+    List<Link> getLinks() throws IOException;
+
+    String getHeadline() throws IOException;
 }

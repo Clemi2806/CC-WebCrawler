@@ -54,30 +54,13 @@ public class Website {
                 throw new IOException();
             }
             if (crawler == null) {
-                crawler = new Crawler();
+                crawler = new JsoupCrawler(this.url.getHref());
             }
-            Document document = crawler.getDocument(this.url.getHref());
-            this.title = document.title();
-            fetchLinks(document);
-            fetchHeadlines(document);
+            this.title = crawler.getHeadline();
+            this.siteHeadlines = crawler.getHeadlines();
+            this.siteLinks = crawler.getLinks();
         } catch (IOException e) {
             System.out.println("Error while accessing website " + this.url.getHref());
-        }
-    }
-
-    private void fetchHeadlines(Document document) {
-        for (int i = 1; i <= 6; i++) {
-            Elements headlines = document.select("h" + i);
-            for (Element headline : headlines) {
-                this.siteHeadlines.add(new Headline(headline.text(), i));
-            }
-        }
-    }
-
-    private void fetchLinks(Document document) {
-        Elements links = document.select("a[href]");
-        for (Element link : links) {
-            this.siteLinks.add(new Link(link.attr("href")));
         }
     }
 
