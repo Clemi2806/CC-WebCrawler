@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class WebsiteTest {
-
     private static String websiteTitle = "Wikipedia";
     Link mockSiteUrl;
     Link workingLink;
@@ -32,7 +31,6 @@ class WebsiteTest {
 
         website = null;
     }
-
 
     @Test
     void createWebsite() {

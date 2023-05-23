@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsoupCrawler implements Crawler{
-
     private String href;
     private Document document;
     List<Headline> headlines;

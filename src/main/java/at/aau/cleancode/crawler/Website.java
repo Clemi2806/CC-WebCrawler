@@ -67,8 +67,6 @@ public class Website {
     public List<Link> getLinks() {
         return this.siteLinks;
     }
-
-
 }
 
 
