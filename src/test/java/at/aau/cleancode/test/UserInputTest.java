@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,11 +41,12 @@ public class UserInputTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"https://www.example.com", "https://www.test.net", "http://www.abc.at"})
+    @ValueSource(strings = {"https://www.example.com https://www.test.net http://www.abc.at", "https://www.test.net http://www.abc.at", "http://www.abc.at"})
     public void testUrl(String url) {
         when(userInputScanner.nextLine()).thenReturn(url);
-        String targetUrl = Main.readTargetUrl();
-        assertEquals(url, targetUrl);
+        int numberOfWebsites = url.split(" ").length;
+        List<String> targetUrl = Main.readTargetUrl();
+        assertEquals(numberOfWebsites, targetUrl.size());
         verify(userInputScanner).nextLine();
     }
 
