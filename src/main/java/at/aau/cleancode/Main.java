@@ -1,6 +1,7 @@
 package at.aau.cleancode;
 
 import at.aau.cleancode.crawler.Report;
+import at.aau.cleancode.crawler.ReportBuilder;
 import at.aau.cleancode.crawler.ReportWriter;
 import at.aau.cleancode.translation.DeeplAPIUtils;
 import at.aau.cleancode.translation.DeeplTranslator;
@@ -8,6 +9,8 @@ import at.aau.cleancode.translation.Translator;
 import at.aau.cleancode.translation.TranslatorException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -16,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         userInputScanner = new Scanner(System.in);
 
-        String targetUrl = readTargetUrl();
+        List<String> targetUrls = readTargetUrl();
         int crawlDepth = readCrawlDepth();
 
         String translationApiKey = DeeplAPIUtils.loadApiKey();
@@ -33,12 +36,18 @@ public class Main {
         } catch (TranslatorException e) {
             System.out.println(e.getMessage());
         }
-        Report report = new Report(targetUrl, crawlDepth);
-        System.out.println("Crawling website ... this may take a while!");
-        report.createReport();
+
+        ReportBuilder builder = new ReportBuilder(targetUrls, crawlDepth);
+        List<Report> reports = null;
+        try {
+            reports = builder.buildReports();
+        } catch (InterruptedException e) {
+            System.out.println("Upsi. Threads putt.");
+        }
+
         ReportWriter reportWriter;
         try {
-            reportWriter = new ReportWriter(report, translator, null); // use null to use default writer
+            reportWriter = new ReportWriter(reports.get(0), translator, null); // use null to use default writer
         } catch (IOException e) {
             System.out.println("Unable to create report file!");
             return;
@@ -50,13 +59,25 @@ public class Main {
         }
     }
 
-    public static String readTargetUrl() {
-        String url = "";
+    public static List<String> readTargetUrl() {
+        List<String> targetUrls = new ArrayList<>();
+        boolean validUrls = true;
         do {
-            System.out.print("Enter URL to crawl e.g. (https://example.com): ");
-            url = userInputScanner.nextLine();
-        } while (!url.matches("https?://.*"));
-        return url;
+            System.out.print("Enter one or more URLs to crawl each seperated by a space e.g. (https://example.com http://website.org): ");
+            String line = userInputScanner.nextLine();
+
+            // check each individual website
+            for(String targetUrl : line.split(" ")){
+                if(!targetUrl.matches("https?://.*")){
+                    validUrls = false;
+                    targetUrls = new ArrayList<>();
+                    break;
+                }
+                targetUrls.add(targetUrl);
+            }
+
+        } while (!validUrls);
+        return targetUrls;
     }
 
     public static int readCrawlDepth() {
