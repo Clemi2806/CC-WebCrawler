@@ -1,12 +1,13 @@
 package at.aau.cleancode.logging;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Logger {
     private static Logger logger;
 
-    public static Logger getInstance(){
+    public static synchronized Logger getInstance(){
         if(logger == null) logger = new Logger();
         return logger;
     }
@@ -18,19 +19,19 @@ public class Logger {
         this.logs = new ArrayList<>();
     }
 
-    public void error(String message){
+    public synchronized void error(String message){
         logs.add("<span style=\"color:red\">E: " + message + "</span>");
     }
 
-    public void info(String info){
+    public synchronized void info(String info){
         logs.add("<span style=\"color:blue\">I: " + info + "</span>");
     }
 
-    public void log(String log) {
+    public synchronized void log(String log) {
         logs.add(log);
     }
 
-    public List<String> getLogs() {
-        return logs;
+    public synchronized List<String> getLogs() {
+        return Collections.unmodifiableList(logs);
     }
 }
