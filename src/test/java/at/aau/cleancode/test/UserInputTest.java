@@ -1,6 +1,7 @@
 package at.aau.cleancode.test;
 
 import at.aau.cleancode.Main;
+import at.aau.cleancode.translation.DeeplTranslator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,7 +35,7 @@ public class UserInputTest {
                 return count++ == 0 ? "dsa" : "DE";
             }
         });
-        String lang = Main.readTargetLanguage();
+        String lang = Main.readTargetLanguage(new DeeplTranslator());
         verify(userInputScanner, times(2)).nextLine();
         assertEquals(lang, "DE");
     }

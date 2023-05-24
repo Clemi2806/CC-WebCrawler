@@ -4,7 +4,8 @@ import at.aau.cleancode.crawler.Report;
 import at.aau.cleancode.crawler.ReportWriter;
 import at.aau.cleancode.translation.DeeplAPIUtils;
 import at.aau.cleancode.translation.DeeplTranslator;
-import at.aau.cleancode.translation.DeeplTranslatorException;
+import at.aau.cleancode.translation.Translator;
+import at.aau.cleancode.translation.TranslatorException;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,14 +18,20 @@ public class Main {
 
         String targetUrl = readTargetUrl();
         int crawlDepth = readCrawlDepth();
-        String targetLanguage = readTargetLanguage();
 
         String translationApiKey = DeeplAPIUtils.loadApiKey();
-        DeeplTranslator translator = null;
+        Translator translator = new DeeplTranslator();
+        String targetLanguage = readTargetLanguage(translator);
         try {
-            translator = new DeeplTranslator(targetLanguage, translationApiKey);
-        } catch (DeeplTranslatorException e) {
-            System.out.println("Unable to create Translation service.");
+            translator.setTargetLanguage(targetLanguage);
+        } catch (TranslatorException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        try {
+            translator.connect(translationApiKey);
+        } catch (TranslatorException e) {
+            System.out.println(e.getMessage());
         }
         Report report = new Report(targetUrl, crawlDepth);
         System.out.println("Crawling website ... this may take a while!");
@@ -69,15 +76,15 @@ public class Main {
         return crawlDepth;
     }
 
-    public static String readTargetLanguage() {
+    public static String readTargetLanguage(Translator translator) {
         System.out.println("Enter the target language, following languages are available: ");
-        DeeplTranslator.printTargetLanguages();
+        translator.printTargetLanguages();
         boolean isSupportedLanguage;
         String targetLanguage;
         do {
             System.out.print("Enter your preferred language, ex. DE: ");
             targetLanguage = userInputScanner.nextLine();
-            isSupportedLanguage = DeeplTranslator.isSupportedLanguage(targetLanguage);
+            isSupportedLanguage = translator.isSupportedLanguage(targetLanguage);
             if (!isSupportedLanguage) {
                 System.out.println("Unsupported language. Please select one from the list and enter the shortcode.");
             }

@@ -1,7 +1,7 @@
 package at.aau.cleancode.test;
 
 import at.aau.cleancode.translation.DeeplTranslator;
-import at.aau.cleancode.translation.DeeplTranslatorException;
+import at.aau.cleancode.translation.TranslatorException;
 import com.deepl.api.TextResult;
 import com.deepl.api.Translator;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,22 +25,18 @@ public class DeeplTranslatorTest {
         reset(translator);
     }
 
-    @Test
-    public void initTranslatorTest() throws DeeplTranslatorException {
-        assertNotNull(new DeeplTranslator("DE", "apikey"));
-    }
 
     @Test
     public void createTranslatorWithNoApiKey() {
-        assertThrows(DeeplTranslatorException.class, () -> {
-            new DeeplTranslator("", null);
+        assertThrows(TranslatorException.class, () -> {
+            (new DeeplTranslator()).connect(null);
         });
     }
 
     @Test
     public void createTranslatorWithInvalidTargetLanguage() {
-        assertThrows(DeeplTranslatorException.class, () -> {
-            new DeeplTranslator("", "apikey");
+        assertThrows(TranslatorException.class, () -> {
+            (new DeeplTranslator()).setTargetLanguage("");
         });
     }
 
@@ -49,7 +45,8 @@ public class DeeplTranslatorTest {
         TextResult result = mock(TextResult.class);
         when(result.getDetectedSourceLanguage()).thenReturn("DE");
         when(translator.translateText((String) any(), (String) any(), any())).thenReturn(result);
-        DeeplTranslator deeplTranslator = new DeeplTranslator(translator, "");
+        DeeplTranslator deeplTranslator = new DeeplTranslator();
+        deeplTranslator.setTranslator(translator);
         deeplTranslator.translate("Hello");
 
         when(result.getDetectedSourceLanguage()).thenReturn("EN-GB");
@@ -66,21 +63,23 @@ public class DeeplTranslatorTest {
     public void testSupportedLanguages() {
         for (String lang : DeeplTranslator.supportedLanguages) {
             String shortcode = lang.split(" - ")[0];
-            assertTrue(DeeplTranslator.isSupportedLanguage(shortcode));
+            assertTrue((new DeeplTranslator()).isSupportedLanguage(shortcode));
         }
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"de", "ef", "Deutsch", "Spaghetti", "1"})
     public void testUnsupportedLanguage(String lang) {
-        assertFalse(DeeplTranslator.isSupportedLanguage(lang));
+        assertFalse((new DeeplTranslator()).isSupportedLanguage(lang));
     }
 
     @ParameterizedTest
     @MethodSource("targetLanguageSource")
-    public void testTargetLanguage(String targetLanguage) {
+    public void testTargetLanguage(String targetLanguage) throws TranslatorException {
         targetLanguage = targetLanguage.split(" - ")[0];
-        DeeplTranslator deeplTranslator = new DeeplTranslator(translator, targetLanguage);
+        DeeplTranslator deeplTranslator = new DeeplTranslator();
+        deeplTranslator.setTranslator(translator);
+        deeplTranslator.setTargetLanguage(targetLanguage);
         assertEquals(targetLanguage, deeplTranslator.getTargetLanguage());
     }
 
