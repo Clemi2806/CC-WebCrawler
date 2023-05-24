@@ -13,6 +13,7 @@ public class ReportWriter {
     private BufferedWriter writer;
     private Report report;
     private Translator translator;
+    private boolean createdWriter;
 
     private static final String NEWLINE = "\n";
     private static final String RULE = "___\n";
@@ -25,8 +26,10 @@ public class ReportWriter {
         // Set the writer to a specific writer for testing, else null
         if (writer == null) {
             this.writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
+            this.createdWriter = true;
         } else {
             this.writer = writer;
+            this.createdWriter = false;
         }
     }
 
@@ -41,7 +44,9 @@ public class ReportWriter {
             writer.append(websiteString);
         }
         writer.flush();
-        writer.close();
+        if(createdWriter){
+            close();
+        }
     }
 
     private String getMainInformation() {
@@ -124,6 +129,13 @@ public class ReportWriter {
 
     private String wrapLink(String link) {
         return "<" + link + ">";
+    }
+
+    void close() throws IOException {
+        if(writer != null){
+            writer.flush();
+            writer.close();
+        }
     }
 
 }

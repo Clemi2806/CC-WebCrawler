@@ -1,5 +1,10 @@
 package at.aau.cleancode.crawler;
 
+import at.aau.cleancode.translation.Translator;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -8,24 +13,51 @@ public class ReportBuilder {
 
     private List<String> targetUrls;
     private int crawlDepth;
+    private final List<Report> reports;
 
     public ReportBuilder(List<String> targetUrls, int crawlDepth) {
         this.targetUrls = targetUrls;
         this.crawlDepth = crawlDepth;
+        reports = new ArrayList<>();
     }
 
-    public List<Report> buildReports() throws InterruptedException {
-        List<Report> reports = new ArrayList<>();
+    public void buildReports() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(targetUrls.size());
         for(String targetUrl : targetUrls){
             Report report = new Report(targetUrl, crawlDepth);
-            reports.add(report);
+            synchronized (this.reports) {
+                this.reports.add(report);
+            }
             ReportGenerator reportGenerator = new ReportGenerator(report, countDownLatch);
             Thread t = new Thread(reportGenerator);
             t.start();
         }
         countDownLatch.await();
-        return reports;
+    }
+
+    public void printReports(Translator translator, BufferedWriter writer) throws IOException {
+        if(writer == null) {
+            long currentTime = System.currentTimeMillis();
+            writer = new BufferedWriter(new FileWriter("report-" + currentTime + ".md"));
+        }
+        ReportWriter reportWriter;
+        for(Report report : this.reports) {
+            try {
+                reportWriter = new ReportWriter(report, translator, writer);
+            } catch (IOException e) {
+                System.out.println("Unable to create report file!");
+                return;
+            }
+            try {
+                reportWriter.writeReport();
+                writer.append("---");
+                writer.append("---");
+            } catch (IOException e) {
+                System.out.println("Unable to write report file!");
+            }
+        }
+        writer.flush();
+        writer.close();
     }
 
     private class ReportGenerator implements Runnable{
