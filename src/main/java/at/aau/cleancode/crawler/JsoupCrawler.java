@@ -23,7 +23,7 @@ public class JsoupCrawler implements Crawler{
 
     private Document getDocument() throws IOException {
         if(this.document == null){
-            return Jsoup.connect(this.href).get();
+            return (this.document = Jsoup.connect(this.href).get());
         }
         return this.document;
     }

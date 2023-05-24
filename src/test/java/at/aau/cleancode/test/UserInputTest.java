@@ -5,12 +5,15 @@ import at.aau.cleancode.translation.DeeplTranslator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -32,7 +35,7 @@ public class UserInputTest {
             int count = 0;
 
             @Override
-            public String answer(InvocationOnMock invocationOnMock) throws Throwable {
+            public String answer(InvocationOnMock invocationOnMock) {
                 return count++ == 0 ? "dsa" : "DE";
             }
         });
@@ -49,6 +52,34 @@ public class UserInputTest {
         List<String> targetUrl = Main.readTargetUrl();
         assertEquals(numberOfWebsites, targetUrl.size());
         verify(userInputScanner).nextLine();
+    }
+
+    @ParameterizedTest
+    @MethodSource("sourceFirstUrlInputNotOk")
+    public void testFaultyUrlInput(String url1, String url2) {
+        when(userInputScanner.nextLine()).then(new Answer<String>() {
+            int count = 0;
+
+            @Override
+            public String answer(InvocationOnMock invocationOnMock) {
+                return count++ == 0 ? url1 : url2;
+            }
+        });
+        int numberOfWebsites = url2.split(" ").length;
+        List<String> targetUrl = Main.readTargetUrl();
+        assertEquals(numberOfWebsites, targetUrl.size());
+        verify(userInputScanner, times(2)).nextLine();
+    }
+
+    static Stream<Arguments> sourceFirstUrlInputNotOk(){
+        return Stream.of(
+                Arguments.of(
+                        "w",
+                        "https://www.test.net http://www.abc.at"),
+                Arguments.of(
+                        "htt://www.test.net http://www.abc.at",
+                        "https://www.test.net http://www.abc.at")
+        );
     }
 
     @ParameterizedTest

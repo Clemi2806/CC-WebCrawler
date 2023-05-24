@@ -38,39 +38,33 @@ public class Main {
         }
 
         ReportBuilder builder = new ReportBuilder(targetUrls, crawlDepth);
-        List<Report> reports = null;
         try {
-            reports = builder.buildReports();
+            builder.buildReports();
         } catch (InterruptedException e) {
             System.out.println("Upsi. Threads putt.");
         }
 
-        ReportWriter reportWriter;
-        try {
-            reportWriter = new ReportWriter(reports.get(0), translator, null); // use null to use default writer
+        try{
+            builder.printReports(translator, null); // use null to use default writer
         } catch (IOException e) {
             System.out.println("Unable to create report file!");
-            return;
-        }
-        try {
-            reportWriter.writeReport();
-        } catch (IOException e) {
-            System.out.println("Unable to write report file!");
         }
     }
 
     public static List<String> readTargetUrl() {
         List<String> targetUrls = new ArrayList<>();
-        boolean validUrls = true;
+        boolean validUrls;
         do {
+            targetUrls.clear();
+            validUrls = true;
             System.out.print("Enter one or more URLs to crawl each seperated by a space e.g. (https://example.com http://website.org): ");
             String line = userInputScanner.nextLine();
 
             // check each individual website
+            line = line.trim();
             for(String targetUrl : line.split(" ")){
                 if(!targetUrl.matches("https?://.*")){
                     validUrls = false;
-                    targetUrls = new ArrayList<>();
                     break;
                 }
                 targetUrls.add(targetUrl);
