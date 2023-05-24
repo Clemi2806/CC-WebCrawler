@@ -1,5 +1,6 @@
 package at.aau.cleancode.logging;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Logger {
@@ -14,6 +15,7 @@ public class Logger {
 
     private Logger(){
         super();
+        this.logs = new ArrayList<>();
     }
 
     public void error(String message){
