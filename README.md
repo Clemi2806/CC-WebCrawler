@@ -1,4 +1,5 @@
 # CC-WebCrawler
+![build](https://github.com/Clemi2806/CC-WebCrawler/actions/workflows/maven.yml/badge.svg)
 
 ## Build, test, run
 
