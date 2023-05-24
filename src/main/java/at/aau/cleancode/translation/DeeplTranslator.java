@@ -45,18 +45,9 @@ public class DeeplTranslator implements at.aau.cleancode.translation.Translator 
     private Translator translator;
     private Set<String> translatedLanguages;
 
-    public DeeplTranslator(String targetLanguage, String apikey) throws DeeplTranslatorException {
-        if (apikey == null) throw new DeeplTranslatorException("API Key was null");
-        if (!isSupportedLanguage(targetLanguage)) throw new DeeplTranslatorException("Invalid target language!");
-        this.targetLanguage = targetLanguage;
-        translator = new Translator(apikey);
+    public DeeplTranslator(){
+        super();
         translatedLanguages = new HashSet<>();
-    }
-
-    public DeeplTranslator(Translator translator, String targetLanguage) {
-        this.translator = translator;
-        translatedLanguages = new HashSet<>();
-        this.targetLanguage = targetLanguage;
     }
 
     @Override
@@ -100,7 +91,23 @@ public class DeeplTranslator implements at.aau.cleancode.translation.Translator 
     }
 
     @Override
+    public void setTargetLanguage(String targetLanguage) throws TranslatorException{
+        if(!isSupportedLanguage(targetLanguage)) throw new TranslatorException("Invalid target language!");
+        this.targetLanguage = targetLanguage;
+    }
+
+    @Override
+    public void connect(String apikey) throws TranslatorException {
+        if(apikey == null) throw new TranslatorException("APIKey was null");
+        this.translator = new Translator(apikey);
+    }
+
+    @Override
     public String getTargetLanguage() {
         return targetLanguage;
+    }
+
+    public void setTranslator(Translator translator) {
+        this.translator = translator;
     }
 }

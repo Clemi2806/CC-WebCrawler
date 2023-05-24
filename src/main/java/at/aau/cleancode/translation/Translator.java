@@ -8,4 +8,6 @@ public interface Translator {
     String getTargetLanguage();
     void printTargetLanguages();
     boolean isSupportedLanguage(String selectedLanguage);
+    void setTargetLanguage(String targetLanguage) throws TranslatorException;
+    void connect(String apikey) throws TranslatorException;
 }
