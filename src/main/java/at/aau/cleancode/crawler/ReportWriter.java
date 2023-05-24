@@ -1,6 +1,7 @@
 package at.aau.cleancode.crawler;
 
 import at.aau.cleancode.translation.DeeplTranslator;
+import at.aau.cleancode.translation.Translator;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -11,13 +12,13 @@ import java.util.List;
 public class ReportWriter {
     private BufferedWriter writer;
     private Report report;
-    private DeeplTranslator translator;
+    private Translator translator;
 
     private static final String NEWLINE = "\n";
     private static final String RULE = "___\n";
     private static final String BREAK = "<br>";
 
-    public ReportWriter(Report report, DeeplTranslator translator, BufferedWriter writer) throws IOException {
+    public ReportWriter(Report report, Translator translator, BufferedWriter writer) throws IOException {
         this.report = report;
         this.translator = translator;
         long currentTime = System.currentTimeMillis();
