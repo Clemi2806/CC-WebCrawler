@@ -1,5 +1,9 @@
-package at.aau.cleancode.crawler;
+package at.aau.cleancode.test;
 
+import at.aau.cleancode.crawler.Crawler;
+import at.aau.cleancode.crawler.Headline;
+import at.aau.cleancode.crawler.JsoupCrawler;
+import at.aau.cleancode.crawler.Link;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;
