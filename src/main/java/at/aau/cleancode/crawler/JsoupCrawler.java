@@ -12,8 +12,9 @@ import java.util.List;
 public class JsoupCrawler implements Crawler{
     private String href;
     private Document document;
-    List<Headline> headlines;
-    List<Link> links;
+    private List<Headline> headlines;
+    private List<Link> links;
+
     public JsoupCrawler(String href) {
         super();
         this.href = href;
@@ -26,6 +27,10 @@ public class JsoupCrawler implements Crawler{
             return (this.document = Jsoup.connect(this.href).get());
         }
         return this.document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
     @Override
