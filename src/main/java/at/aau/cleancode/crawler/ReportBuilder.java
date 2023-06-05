@@ -1,5 +1,6 @@
 package at.aau.cleancode.crawler;
 
+import at.aau.cleancode.logging.Logger;
 import at.aau.cleancode.translation.Translator;
 
 import java.io.BufferedWriter;
@@ -50,14 +51,31 @@ public class ReportBuilder {
             }
             try {
                 reportWriter.writeReport();
-                writer.append("---");
-                writer.append("---");
+                writer.append("---\n");
+                writer.append("---\n");
             } catch (IOException e) {
                 System.out.println("Unable to write report file!");
+                return;
             }
         }
+        writer.append(getLogs());
         writer.flush();
         writer.close();
+    }
+
+    private String getLogs(){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("# Logs").append("\n");
+        List<String> logs = Logger.getInstance().getLogs();
+        if(logs.isEmpty()){
+            stringBuilder.append("<br>").append("No logs reported!").append("\n");
+        } else {
+            for(String s : logs) {
+                stringBuilder.append("<br>").append(s).append("\n");
+            }
+        }
+        return stringBuilder.toString();
     }
 
     private class ReportGenerator implements Runnable{
