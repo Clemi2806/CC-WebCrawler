@@ -22,14 +22,14 @@ public class LoggerTest {
     public void errorLoggingTest(){
         Logger logger = Logger.getInstance();
         logger.error("ERROR");
-        assertEquals("<span style=\"color:red\">E: ERROR</span>", logger.getLogs().get(0));
+        assertEquals("<span style=\"color:red\">E: ERROR </span>", logger.getLogs().get(0));
     }
 
     @Test
     public void infoLoggingTest(){
         Logger logger = Logger.getInstance();
         logger.info("INFO");
-        assertEquals("<span style=\"color:blue\">I: INFO</span>", logger.getLogs().get(0));
+        assertEquals("<span style=\"color:blue\">I: INFO </span>", logger.getLogs().get(0));
     }
 
     @Test
@@ -45,8 +45,8 @@ public class LoggerTest {
         logger.error("ERROR");
         logger.info("INFO");
         logger.log("LOG");
-        assertEquals("<span style=\"color:red\">E: ERROR</span>", logger.getLogs().get(0));
-        assertEquals("<span style=\"color:blue\">I: INFO</span>", logger.getLogs().get(1));
+        assertEquals("<span style=\"color:red\">E: ERROR </span>", logger.getLogs().get(0));
+        assertEquals("<span style=\"color:blue\">I: INFO </span>", logger.getLogs().get(1));
         assertEquals("LOG", logger.getLogs().get(2));
     }
 }
