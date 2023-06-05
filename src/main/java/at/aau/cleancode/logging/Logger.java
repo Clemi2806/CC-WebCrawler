@@ -20,11 +20,11 @@ public class Logger {
     }
 
     public synchronized void error(String message){
-        logs.add("<span style=\"color:red\">E: " + message + "</span>");
+        logs.add("<span style=\"color:red\">E: " + message + " </span>");
     }
 
     public synchronized void info(String info){
-        logs.add("<span style=\"color:blue\">I: " + info + "</span>");
+        logs.add("<span style=\"color:blue\">I: " + info + " </span>");
     }
 
     public synchronized void log(String log) {
