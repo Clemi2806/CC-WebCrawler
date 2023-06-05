@@ -1,5 +1,7 @@
 package at.aau.cleancode.crawler;
 
+import at.aau.cleancode.logging.Logger;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ public class Website {
             this.siteHeadlines = crawler.getHeadlines();
             this.siteLinks = crawler.getLinks();
         } catch (IOException e) {
-            System.out.println("Error while accessing website " + this.url.getHref());
+            Logger.getInstance().error("Error while accessing website " + this.url.getHref());
         }
     }
 
